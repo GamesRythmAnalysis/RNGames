@@ -96,7 +96,8 @@ public class MouseWriter extends MouseListener {
 		return "mouse " + evt.getButton() + " " +  eventType + CSV_SEPARATOR //$NON-NLS-1$ //$NON-NLS-2$
 				+ evt.getX() + CSV_SEPARATOR
 				+ evt.getY() + CSV_SEPARATOR
-				+ evt.getWhen();
+				+ evt.getWhen()
+				+ "\n"; //$NON-NLS-1$
 	}
 
 	private static String generateMouseButtonEntry(NativeMouseWheelEvent evt) {
