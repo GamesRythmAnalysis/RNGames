@@ -5,18 +5,18 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<BorderPane minHeight="250.0" minWidth="250.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane minHeight="200.0" minWidth="400.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.utbm.RNGames.controller.RootLayoutController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="%menu.title.file">
             <items>
-              <MenuItem mnemonicParsing="false" text="%menu.title.quit" />
+              <MenuItem mnemonicParsing="false" onAction="#handleExit" text="%menu.title.quit" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="%menu.title.help">
             <items>
-              <MenuItem mnemonicParsing="false" text="%menu.title.about" />
+              <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="%menu.title.about" />
             </items>
           </Menu>
         </menus>

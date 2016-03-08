@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import fr.utbm.RNGames.controller.MainWindowController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -37,7 +38,7 @@ public class App extends Application {
 	/**
 	 * Initializes the root layout.
 	 */
-	public void initRootLayout() {
+	private void initRootLayout() {
 		try {
 			// Load root layout from fxml file.
 			final FXMLLoader loader = new FXMLLoader();
@@ -49,10 +50,6 @@ public class App extends Application {
 			final Scene scene = new Scene(this.rootLayout);
 			this.primStage.setScene(scene);
 
-			// Give the controller access to the main app. TODO
-			//final RootLayoutController controller = loader.getController();
-			//controller.setMainApp(this);
-
 			this.primStage.show();
 		} catch (final IOException e) {
 			e.printStackTrace();
@@ -62,7 +59,7 @@ public class App extends Application {
 	/**
 	 * Shows the main window inside the root layout.
 	 */
-	public void showMainWindow() {
+	private void showMainWindow() {
 		try {
 			// Load person overview.
 			final FXMLLoader loader = new FXMLLoader();
@@ -73,9 +70,9 @@ public class App extends Application {
 			// Set person overview into the center of root layout.
 			this.rootLayout.setCenter(mainWindow);
 
-			// Give the controller access to the main app. TODO
-			//final MainWindowController controller = loader.getController();
-			//controller.setMainApp(this);
+			// Give the controller access to the main app.
+			final MainWindowController controller = loader.getController();
+			controller.setApp(this);
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
