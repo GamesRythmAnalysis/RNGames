@@ -79,6 +79,11 @@ public class App extends Application {
 	}
 
 	public static void main(String[] args) {
+		// Security check
+		if (Locale.getDefault() != Locale.FRANCE && Locale.getDefault() != Locale.FRENCH) {
+			Locale.setDefault(Locale.ENGLISH);
+		}
+
 		launch(args);
 	}
 }
