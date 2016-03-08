@@ -1,18 +1,21 @@
 package fr.utbm.RNGames.controller;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.arakhne.afc.vmutil.locale.Locale;
 
 import fr.utbm.RNGames.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.stage.DirectoryChooser;
 
-@SuppressWarnings("unused")
 public class MainWindowController {
 
 	@FXML
@@ -74,10 +77,8 @@ public class MainWindowController {
 	}
 
 	@FXML
-	void handleStartRecording(@SuppressWarnings("unused") ActionEvent event) {
-		if (!this.toggleButtonGamepad.isSelected()
-				&& !this.toggleButtonKeyboard.isSelected()
-				&& !this.toggleButtonMouse.isSelected()) {
+	private void handleStartRecording(@SuppressWarnings("unused") ActionEvent event) {
+		if (!isReadyToRecord()) {
 			return;
 		}
 
@@ -92,7 +93,7 @@ public class MainWindowController {
 	}
 
 	@FXML
-	void handleStopRecording(@SuppressWarnings("unused") ActionEvent event) {
+	private void handleStopRecording(@SuppressWarnings("unused") ActionEvent event) {
 		this.textAreaSaveDirectory.disableProperty().set(false);
 		this.textAreaRecordName.disableProperty().set(false);
 		this.buttonSelectDirectory.disableProperty().set(false);
@@ -101,6 +102,48 @@ public class MainWindowController {
 		this.toggleButtonMouse.disableProperty().set(false);
 		this.buttonStartRecording.disableProperty().set(false);
 		this.buttonStopRecording.disableProperty().set(true);
+	}
+
+	/**
+	 * Check if the recording can be started.
+	 *
+	 * @return true if the recording can be started.
+	 */
+	private boolean isReadyToRecord() {
+		final List<String> errorMessages = new ArrayList<>();
+
+		if (this.textAreaSaveDirectory.getText() == null
+				|| this.textAreaSaveDirectory.getText().length() == 0) {
+			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.save.directory")); //$NON-NLS-1$
+		} else if (!new File(this.textAreaSaveDirectory.getText()).exists()) {
+			errorMessages.add(Locale.getString(MainWindowController.class, "error.invalid.save.directory")); //$NON-NLS-1$
+		}
+
+		if (this.textAreaRecordName.getText() == null
+				|| this.textAreaRecordName.getText().length() == 0) {
+			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.record.name")); //$NON-NLS-1$
+		}
+
+		if (!this.toggleButtonGamepad.isSelected()
+				&& !this.toggleButtonKeyboard.isSelected()
+				&& !this.toggleButtonMouse.isSelected()) {
+			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.device")); //$NON-NLS-1$
+		}
+
+		if (errorMessages.size() == 0) {
+			return true;
+		}
+
+		// Show the error message.
+		final Alert alert = new Alert(AlertType.ERROR);
+		alert.initOwner(this.app.getPrimaryStage());
+		alert.setTitle(Locale.getString(MainWindowController.class, "alert.error.title")); //$NON-NLS-1$
+		alert.setHeaderText(Locale.getString(MainWindowController.class, "alert.error.header")); //$NON-NLS-1$
+		alert.setContentText(String.join("\n", errorMessages)); //$NON-NLS-1$);
+
+		alert.showAndWait();
+
+		return false;
 	}
 
 }
