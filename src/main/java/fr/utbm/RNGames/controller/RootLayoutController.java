@@ -1,5 +1,7 @@
 package fr.utbm.RNGames.controller;
 
+import org.arakhne.afc.vmutil.locale.Locale;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -13,10 +15,9 @@ public class RootLayoutController {
 	@FXML
 	private void handleAbout() {
 		final Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("RNGames");
-		alert.setHeaderText("About");
-		alert.setContentText("Authors: Jérôme BOULMIER & Benoît CORTIER\n"
-				+ "Website: http://nononono.no");
+		alert.setTitle(Locale.getString(RootLayoutController.class, "alert.about.title")); //$NON-NLS-1$
+		alert.setHeaderText(Locale.getString(RootLayoutController.class, "alert.about.header")); //$NON-NLS-1$
+		alert.setContentText(Locale.getString(RootLayoutController.class, "alert.about.content.text")); //$NON-NLS-1$
 
 		alert.showAndWait();
 	}

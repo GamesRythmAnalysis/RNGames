@@ -2,6 +2,8 @@ package fr.utbm.RNGames.controller;
 
 import java.io.File;
 
+import org.arakhne.afc.vmutil.locale.Locale;
+
 import fr.utbm.RNGames.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.stage.DirectoryChooser;
 
+@SuppressWarnings("unused")
 public class MainWindowController {
 
 	@FXML
@@ -54,7 +57,7 @@ public class MainWindowController {
 	@FXML
 	private void handleSelectFolder() {
 		final DirectoryChooser chooser = new DirectoryChooser();
-		chooser.setTitle("Select directory where records are saved");
+		chooser.setTitle(Locale.getString(MainWindowController.class, "directory.chooser.title")); //$NON-NLS-1$
 
 		if (!this.textAreaSaveDirectory.getText().equals("")) { //$NON-NLS-1$
 			final File defaultDirectory = new File(this.textAreaSaveDirectory.getText());
