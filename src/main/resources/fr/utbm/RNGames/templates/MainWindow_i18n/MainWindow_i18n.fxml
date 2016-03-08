@@ -12,14 +12,14 @@
          <children>
             <HBox alignment="CENTER" spacing="5.0">
                <children>
-                  <Label text="%mainwindow.label.save.directory" />
+                  <Label text="%label.save.directory" />
                   <TextField fx:id="textAreaSaveDirectory" />
-                  <Button fx:id="buttonSelectDirectory" mnemonicParsing="false" onAction="#handleSelectFolder" text="%mainwindow.button.select.directory" />
+                  <Button fx:id="buttonSelectDirectory" mnemonicParsing="false" onAction="#handleSelectFolder" text="%button.select.directory" />
                </children>
             </HBox>
             <HBox alignment="CENTER" spacing="5.0">
                <children>
-                  <Label text="%mainwindow.label.filename" />
+                  <Label text="%label.filename" />
                   <TextField fx:id="textAreaRecordName">
                      <HBox.margin>
                         <Insets />
@@ -29,15 +29,16 @@
             </HBox>
             <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
                <children>
-                  <ToggleButton fx:id="toggleButtonKeyboard" mnemonicParsing="false" text="%mainwindow.button.keyboard" />
-                  <ToggleButton fx:id="toggleButtonMouse" mnemonicParsing="false" text="%mainwindow.button.mouse" />
-                  <ToggleButton fx:id="toggleButtonGamepad" mnemonicParsing="false" text="%mainwindow.button.gamepad" />
+                  <Label text="%label.device" />
+                  <ToggleButton fx:id="toggleButtonKeyboard" mnemonicParsing="false" text="%button.keyboard" />
+                  <ToggleButton fx:id="toggleButtonMouse" mnemonicParsing="false" text="%button.mouse" />
+                  <ToggleButton fx:id="toggleButtonGamepad" mnemonicParsing="false" text="%button.gamepad" />
                </children>
             </HBox>
             <HBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Button fx:id="buttonStartRecording" mnemonicParsing="false" onAction="#handleStartRecording" text="%mainwindow.button.start" />
-                  <Button fx:id="buttonStopRecording" disable="true" mnemonicParsing="false" onAction="#handleStopRecording" text="%mainwindow.button.stop" />
+                  <Button fx:id="buttonStartRecording" mnemonicParsing="false" onAction="#handleStartRecording" text="%button.start" />
+                  <Button fx:id="buttonStopRecording" disable="true" mnemonicParsing="false" onAction="#handleStopRecording" text="%button.stop" />
                </children>
             </HBox>
          </children>

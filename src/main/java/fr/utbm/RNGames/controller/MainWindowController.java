@@ -3,12 +3,18 @@ package fr.utbm.RNGames.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.arakhne.afc.vmutil.locale.Locale;
 
 import fr.utbm.RNGames.App;
 import fr.utbm.RNGames.keyboard.KeyboardWriter;
 import fr.utbm.RNGames.mouse.MouseWriter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
@@ -60,7 +66,8 @@ public class MainWindowController {
 	@FXML
 	private void handleSelectFolder() {
 		final DirectoryChooser chooser = new DirectoryChooser();
-		chooser.setTitle("Select directory where records are saved"); //$NON-NLS-1$
+
+		chooser.setTitle(Locale.getString(MainWindowController.class, "directory.chooser.title")); //$NON-NLS-1$
 
 		if (!this.textAreaSaveDirectory.getText().equals("")) { //$NON-NLS-1$
 			final File defaultDirectory = new File(this.textAreaSaveDirectory.getText());
@@ -77,16 +84,14 @@ public class MainWindowController {
 	}
 
 	@FXML
-	void handleStartRecording(@SuppressWarnings("unused") ActionEvent event) {
-		if (!this.toggleButtonGamepad.isSelected()
-				&& !this.toggleButtonKeyboard.isSelected()
-				&& !this.toggleButtonMouse.isSelected()) {
+	private void handleStartRecording(@SuppressWarnings("unused") ActionEvent event) {
+		if (!isReadyToRecord()) {
 			return;
 		}
 
 		if (this.toggleButtonKeyboard.isSelected()) {
 			try {
-				this.kWriter = new KeyboardWriter(new URL("file://" + this.textAreaSaveDirectory.getText() + "/keyboard.csv")); //$NON-NLS-1$ //$NON-NLS-2$
+				this.kWriter = new KeyboardWriter(new URL("file://" + this.textAreaSaveDirectory.getText() + "/keyboard.csv"));  //$NON-NLS-1$//$NON-NLS-2$
 				this.kWriter.start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -115,7 +120,7 @@ public class MainWindowController {
 	}
 
 	@FXML
-	void handleStopRecording(@SuppressWarnings("unused") ActionEvent event) {
+	private void handleStopRecording(@SuppressWarnings("unused") ActionEvent event) {
 		this.textAreaSaveDirectory.disableProperty().set(false);
 		this.textAreaRecordName.disableProperty().set(false);
 		this.buttonSelectDirectory.disableProperty().set(false);
@@ -132,6 +137,48 @@ public class MainWindowController {
 		if (this.mWriter != null) {
 			this.mWriter.stop();
 		}
+	}
+
+	/**
+	 * Check if the recording can be started.
+	 *
+	 * @return true if the recording can be started.
+	 */
+	private boolean isReadyToRecord() {
+		final List<String> errorMessages = new ArrayList<>();
+
+		if (this.textAreaSaveDirectory.getText() == null
+				|| this.textAreaSaveDirectory.getText().length() == 0) {
+			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.save.directory")); //$NON-NLS-1$
+		} else if (!new File(this.textAreaSaveDirectory.getText()).exists()) {
+			errorMessages.add(Locale.getString(MainWindowController.class, "error.invalid.save.directory")); //$NON-NLS-1$
+		}
+
+		if (this.textAreaRecordName.getText() == null
+				|| this.textAreaRecordName.getText().length() == 0) {
+			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.record.name")); //$NON-NLS-1$
+		}
+
+		if (!this.toggleButtonGamepad.isSelected()
+				&& !this.toggleButtonKeyboard.isSelected()
+				&& !this.toggleButtonMouse.isSelected()) {
+			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.device")); //$NON-NLS-1$
+		}
+
+		if (errorMessages.size() == 0) {
+			return true;
+		}
+
+		// Show the error message.
+		final Alert alert = new Alert(AlertType.ERROR);
+		alert.initOwner(this.app.getPrimaryStage());
+		alert.setTitle(Locale.getString(MainWindowController.class, "alert.error.title")); //$NON-NLS-1$
+		alert.setHeaderText(Locale.getString(MainWindowController.class, "alert.error.header")); //$NON-NLS-1$
+		alert.setContentText(String.join("\n", errorMessages)); //$NON-NLS-1$);
+
+		alert.showAndWait();
+
+		return false;
 	}
 
 }
