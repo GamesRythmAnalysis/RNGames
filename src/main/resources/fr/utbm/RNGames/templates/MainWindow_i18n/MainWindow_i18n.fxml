@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="250.0" minWidth="250.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="CENTER" layoutX="184.0" layoutY="78.0" spacing="10.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <ToggleButton mnemonicParsing="false" text="%mainwindow.button.keyboard" />
+                  <ToggleButton mnemonicParsing="false" text="%mainwindow.button.mouse" />
+                  <ToggleButton mnemonicParsing="false" text="%mainwindow.button.gamepad" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <Button mnemonicParsing="false" text="%mainwindow.button.start" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
