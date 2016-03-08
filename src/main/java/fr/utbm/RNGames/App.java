@@ -3,6 +3,11 @@ package fr.utbm.RNGames;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
 
 import fr.utbm.RNGames.controller.MainWindowController;
 import javafx.application.Application;
@@ -79,6 +84,23 @@ public class App extends Application {
 	}
 
 	public static void main(String[] args) {
+		try {
+			GlobalScreen.registerNativeHook();
+		} catch (NativeHookException e) {
+			e.printStackTrace();
+		}
+
+		Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+		logger.setLevel(Level.WARNING);
+		logger.setUseParentHandlers(false);
+
 		launch(args);
+
+		try {
+			GlobalScreen.unregisterNativeHook();
+		} catch (NativeHookException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
