@@ -74,7 +74,13 @@ public class MainWindowController {
 	}
 
 	@FXML
-	void handleStartRecording(ActionEvent event) {
+	void handleStartRecording(@SuppressWarnings("unused") ActionEvent event) {
+		if (!this.toggleButtonGamepad.isSelected()
+				&& !this.toggleButtonKeyboard.isSelected()
+				&& !this.toggleButtonMouse.isSelected()) {
+			return;
+		}
+
 		this.textAreaSaveDirectory.disableProperty().set(true);
 		this.textAreaRecordName.disableProperty().set(true);
 		this.buttonSelectDirectory.disableProperty().set(true);
@@ -86,7 +92,7 @@ public class MainWindowController {
 	}
 
 	@FXML
-	void handleStopRecording(ActionEvent event) {
+	void handleStopRecording(@SuppressWarnings("unused") ActionEvent event) {
 		this.textAreaSaveDirectory.disableProperty().set(false);
 		this.textAreaRecordName.disableProperty().set(false);
 		this.buttonSelectDirectory.disableProperty().set(false);
