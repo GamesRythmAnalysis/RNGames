@@ -1,4 +1,4 @@
-package fr.utbm.RNGames;
+package fr.utbm.rngames;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
-import fr.utbm.RNGames.controller.MainWindowController;
+import fr.utbm.rngames.controller.MainWindowController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -48,7 +48,7 @@ public class App extends Application {
 			// Load root layout from fxml file.
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(App.class.getResource("templates/RootLayout_i18n/RootLayout_i18n.fxml")); //$NON-NLS-1$
-			loader.setResources(ResourceBundle.getBundle("fr.utbm.RNGames.templates.RootLayout_i18n.RootLayout", Locale.getDefault())); //$NON-NLS-1$
+			loader.setResources(ResourceBundle.getBundle("fr.utbm.rngames.templates.RootLayout_i18n.RootLayout", Locale.getDefault())); //$NON-NLS-1$
 			this.rootLayout = (BorderPane) loader.load();
 
 			// Show the scene containing the root layout.
@@ -69,7 +69,7 @@ public class App extends Application {
 			// Load person overview.
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(App.class.getResource("templates/MainWindow_i18n/MainWindow_i18n.fxml")); //$NON-NLS-1$
-			loader.setResources(ResourceBundle.getBundle("fr.utbm.RNGames.templates.MainWindow_i18n.MainWindow", Locale.getDefault())); //$NON-NLS-1$
+			loader.setResources(ResourceBundle.getBundle("fr.utbm.rngames.templates.MainWindow_i18n.MainWindow", Locale.getDefault())); //$NON-NLS-1$
 			final AnchorPane mainWindow = (AnchorPane) loader.load();
 
 			// Set person overview into the center of root layout.
@@ -91,11 +91,11 @@ public class App extends Application {
 
 		try {
 			GlobalScreen.registerNativeHook();
-		} catch (NativeHookException e) {
+		} catch (final NativeHookException e) {
 			e.printStackTrace();
 		}
 
-		Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+		final Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
 		logger.setLevel(Level.WARNING);
 		logger.setUseParentHandlers(false);
 
@@ -103,7 +103,7 @@ public class App extends Application {
 
 		try {
 			GlobalScreen.unregisterNativeHook();
-		} catch (NativeHookException e) {
+		} catch (final NativeHookException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

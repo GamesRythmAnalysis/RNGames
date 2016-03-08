@@ -1,4 +1,4 @@
-package fr.utbm.RNGames.controller;
+package fr.utbm.rngames.controller;
 
 import org.arakhne.afc.vmutil.locale.Locale;
 

@@ -1,4 +1,4 @@
-package fr.utbm.RNGames.controller;
+package fr.utbm.rngames.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.arakhne.afc.vmutil.locale.Locale;
 
-import fr.utbm.RNGames.App;
-import fr.utbm.RNGames.keyboard.KeyboardWriter;
-import fr.utbm.RNGames.mouse.MouseWriter;
+import fr.utbm.rngames.App;
+import fr.utbm.rngames.keyboard.KeyboardWriter;
+import fr.utbm.rngames.mouse.MouseWriter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;

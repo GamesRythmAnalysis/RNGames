@@ -1,4 +1,4 @@
-package fr.utbm.RNGames.keyboard;
+package fr.utbm.rngames.keyboard;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyListener;

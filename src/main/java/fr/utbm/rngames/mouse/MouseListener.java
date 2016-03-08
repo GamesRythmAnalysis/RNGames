@@ -1,4 +1,4 @@
-package fr.utbm.RNGames.mouse;
+package fr.utbm.rngames.mouse;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.mouse.NativeMouseListener;

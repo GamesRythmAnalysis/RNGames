@@ -1,4 +1,4 @@
-package fr.utbm.RNGames.keyboard;
+package fr.utbm.rngames.keyboard;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;

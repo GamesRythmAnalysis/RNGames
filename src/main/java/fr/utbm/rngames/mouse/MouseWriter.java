@@ -1,4 +1,4 @@
-package fr.utbm.RNGames.mouse;
+package fr.utbm.rngames.mouse;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
