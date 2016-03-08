@@ -1,19 +1,21 @@
 package fr.utbm.RNGames.mouse;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.logging.Logger;
 
 import org.arakhne.afc.vmutil.locale.Locale;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseWheelEvent;
 
-public class MouseWriter implements MouseListener {
+import fr.utbm.RNGames.keyboard.KeyboardWriter;
+
+public class MouseWriter extends MouseListener {
 	private final static String CSV_SEPARATOR;
 
 	static {
@@ -22,13 +24,22 @@ public class MouseWriter implements MouseListener {
 
 	private final Logger log = Logger.getLogger(MouseWriter.class.getName());
 
-	private final Path fileLocation;
+	private final Writer writer;
 
-	public MouseWriter(URI fileLocation) throws IOException {
-		this.fileLocation = Paths.get(fileLocation);
+	public MouseWriter(URL fileLocation) throws IOException {
+		this.writer = new BufferedWriter(new OutputStreamWriter(
+				new FileOutputStream(fileLocation.getPath()), StandardCharsets.UTF_8));
 
-		Files.write(this.fileLocation, Locale.getString(MouseWriter.class, "mouse.file.header").getBytes(StandardCharsets.UTF_8), //$NON-NLS-1$
-				StandardOpenOption.CREATE);
+		this.writer.write(Locale.getString(KeyboardWriter.class, "mouse.file.header")); //$NON-NLS-1$
+	}
+
+	@Override
+	public void close() {
+		try {
+			this.writer.close();
+		} catch (IOException e) {
+			this.log.severe(e.getMessage());
+		}
 	}
 
 	@Override
@@ -39,8 +50,7 @@ public class MouseWriter implements MouseListener {
 	@Override
 	public void nativeMousePressed(NativeMouseEvent evt) {
 		try {
-			Files.write(this.fileLocation, generateMouseButtonEntry("down", evt).getBytes(StandardCharsets.UTF_8), //$NON-NLS-1$
-					StandardOpenOption.APPEND);
+			this.writer.write(generateMouseButtonEntry("down", evt)); //$NON-NLS-1$
 		} catch (IOException exception) {
 			this.log.severe(exception.getMessage());
 			// System.exit(-1);
@@ -50,8 +60,7 @@ public class MouseWriter implements MouseListener {
 	@Override
 	public void nativeMouseReleased(NativeMouseEvent evt) {
 		try {
-			Files.write(this.fileLocation, generateMouseButtonEntry("up", evt).getBytes(StandardCharsets.UTF_8), //$NON-NLS-1$
-					StandardOpenOption.APPEND);
+			this.writer.write(generateMouseButtonEntry("up", evt)); //$NON-NLS-1$
 		} catch (IOException exception) {
 			this.log.severe(exception.getMessage());
 			// System.exit(-1);
@@ -61,8 +70,7 @@ public class MouseWriter implements MouseListener {
 	@Override
 	public void nativeMouseMoved(NativeMouseEvent evt) {
 		try {
-			Files.write(this.fileLocation, generateMouseMoveEntry(evt).getBytes(StandardCharsets.UTF_8),
-					StandardOpenOption.APPEND);
+			this.writer.write(generateMouseMoveEntry(evt));
 		} catch (IOException exception) {
 			this.log.severe(exception.getMessage());
 			// System.exit(-1);
@@ -77,8 +85,7 @@ public class MouseWriter implements MouseListener {
 	@Override
 	public void nativeMouseWheelMoved(NativeMouseWheelEvent evt) {
 		try {
-			Files.write(this.fileLocation, generateMouseButtonEntry(evt).getBytes(StandardCharsets.UTF_8),
-					StandardOpenOption.APPEND);
+			this.writer.write(generateMouseButtonEntry(evt));
 		} catch (IOException exception) {
 			this.log.severe(exception.getMessage());
 			// System.exit(-1);
@@ -97,19 +104,22 @@ public class MouseWriter implements MouseListener {
 			return "mouse scroll down" + CSV_SEPARATOR //$NON-NLS-1$
 					+ evt.getX() + CSV_SEPARATOR
 					+ evt.getY() + CSV_SEPARATOR
-					+ evt.getWhen();
+					+ evt.getWhen()
+					+ "\n"; //$NON-NLS-1$
 		}
 
 		return "mouse scroll up" + CSV_SEPARATOR //$NON-NLS-1$
 				+ evt.getX() + CSV_SEPARATOR
 				+ evt.getY() + CSV_SEPARATOR
-				+ evt.getWhen();
+				+ evt.getWhen()
+				+ "\n"; //$NON-NLS-1$
 	}
 
 	private static String generateMouseMoveEntry(NativeMouseEvent evt) {
 		return "mouse move" + CSV_SEPARATOR //$NON-NLS-1$
 				+ evt.getX() + CSV_SEPARATOR
 				+ evt.getY() + CSV_SEPARATOR
-				+ evt.getWhen();
+				+ evt.getWhen()
+				+ "\n"; //$NON-NLS-1$
 	}
 }
