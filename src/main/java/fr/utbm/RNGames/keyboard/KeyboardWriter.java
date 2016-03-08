@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import org.arakhne.afc.vmutil.locale.Locale;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
-public class KeyboardWriter implements KeyboardListener {
+public class KeyboardWriter extends KeyboardListener {
 	private final static String CSV_SEPARATOR;
 
 	static {
@@ -28,6 +28,15 @@ public class KeyboardWriter implements KeyboardListener {
 				new FileOutputStream(fileLocation.getPath()), StandardCharsets.UTF_8));
 
 		this.writer.write(Locale.getString(KeyboardWriter.class, "keyboard.file.header")); //$NON-NLS-1$
+	}
+
+	@Override
+	protected void close() {
+		try {
+			this.writer.close();
+		} catch (IOException exception) {
+			this.log.severe(exception.getMessage());
+		}
 	}
 
 	@Override
@@ -55,8 +64,8 @@ public class KeyboardWriter implements KeyboardListener {
 
 	private static String generateFileEntry(String eventType, NativeKeyEvent event) {
 		return eventType + CSV_SEPARATOR
-				+ event.getKeyChar() + CSV_SEPARATOR
-				+ event.getWhen();
+				+ NativeKeyEvent.getKeyText(event.getKeyCode()) + CSV_SEPARATOR
+				+ event.getWhen() + "\n"; //$NON-NLS-1$
 	}
 
 }
