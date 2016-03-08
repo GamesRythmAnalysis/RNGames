@@ -13,8 +13,6 @@ import org.arakhne.afc.vmutil.locale.Locale;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseWheelEvent;
 
-import fr.utbm.RNGames.keyboard.KeyboardWriter;
-
 public class MouseWriter extends MouseListener {
 	private final static String CSV_SEPARATOR;
 
@@ -30,7 +28,7 @@ public class MouseWriter extends MouseListener {
 		this.writer = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(fileLocation.getPath()), StandardCharsets.UTF_8));
 
-		this.writer.write(Locale.getString(KeyboardWriter.class, "mouse.file.header")); //$NON-NLS-1$
+		this.writer.write(Locale.getString(MouseWriter.class, "mouse.file.header")); //$NON-NLS-1$
 	}
 
 	@Override
