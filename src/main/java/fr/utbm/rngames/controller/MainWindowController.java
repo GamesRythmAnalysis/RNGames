@@ -91,9 +91,9 @@ public class MainWindowController {
 
 		if (this.toggleButtonKeyboard.isSelected()) {
 			try {
-				this.kWriter = new KeyboardWriter(new URL("file://" + this.textAreaSaveDirectory.getText() + "/keyboard.csv"));  //$NON-NLS-1$//$NON-NLS-2$
+				this.kWriter = new KeyboardWriter(new URL("file:///" + this.textAreaSaveDirectory.getText() + "/keyboard.csv"));  //$NON-NLS-1$//$NON-NLS-2$
 				this.kWriter.start();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -101,9 +101,9 @@ public class MainWindowController {
 
 		if (this.toggleButtonMouse.isSelected()) {
 			try {
-				this.mWriter = new MouseWriter(new URL("file://" + this.textAreaSaveDirectory.getText() + "/mouse.csv")); //$NON-NLS-1$ //$NON-NLS-2$
+				this.mWriter = new MouseWriter(new URL("file:///" + this.textAreaSaveDirectory.getText() + "/mouse.csv")); //$NON-NLS-1$ //$NON-NLS-2$
 				this.mWriter.start();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
