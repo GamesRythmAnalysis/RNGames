@@ -164,6 +164,7 @@ public class MainWindowController {
 			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.device")); //$NON-NLS-1$
 		}
 
+		// TODO: add check for record name already existing.
 		if (errorMessages.isEmpty()) {
 			return true;
 		}
