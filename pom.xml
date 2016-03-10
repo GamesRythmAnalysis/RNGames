@@ -31,6 +31,17 @@
     	<artifactId>vmutils</artifactId>
     	<version>12.0</version>
     </dependency>
+    <dependency>
+    	<groupId>net.java.jinput</groupId>
+    	<artifactId>jinput</artifactId>
+    	<version>2.0.6</version>
+    </dependency>
+    <dependency>
+    	<groupId>net.java.jinput</groupId>
+    	<artifactId>jinput-platform</artifactId>
+    	<version>2.0.6</version>
+    	<type>pom</type>
+    </dependency>
   </dependencies>
 
   <build>
