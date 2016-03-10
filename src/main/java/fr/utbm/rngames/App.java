@@ -1,14 +1,5 @@
 package fr.utbm.rngames;
 
-import java.io.IOException;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
-
 import fr.utbm.rngames.controller.MainWindowController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+
+import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class App extends Application {
 
@@ -49,7 +48,7 @@ public class App extends Application {
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(App.class.getResource("templates/RootLayout_i18n/RootLayout_i18n.fxml")); //$NON-NLS-1$
 			loader.setResources(ResourceBundle.getBundle("fr.utbm.rngames.templates.RootLayout_i18n.RootLayout", Locale.getDefault())); //$NON-NLS-1$
-			this.rootLayout = (BorderPane) loader.load();
+			this.rootLayout = loader.load();
 
 			// Show the scene containing the root layout.
 			final Scene scene = new Scene(this.rootLayout);
@@ -70,7 +69,7 @@ public class App extends Application {
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(App.class.getResource("templates/MainWindow_i18n/MainWindow_i18n.fxml")); //$NON-NLS-1$
 			loader.setResources(ResourceBundle.getBundle("fr.utbm.rngames.templates.MainWindow_i18n.MainWindow", Locale.getDefault())); //$NON-NLS-1$
-			final AnchorPane mainWindow = (AnchorPane) loader.load();
+			final AnchorPane mainWindow = loader.load();
 
 			// Set person overview into the center of root layout.
 			this.rootLayout.setCenter(mainWindow);
@@ -85,7 +84,7 @@ public class App extends Application {
 
 	public static void main(String[] args) {
 		// Security check
-		if (Locale.getDefault() != Locale.FRANCE && Locale.getDefault() != Locale.FRENCH) {
+		if ((Locale.getDefault() != Locale.FRANCE) && (Locale.getDefault() != Locale.FRENCH)) {
 			Locale.setDefault(Locale.ENGLISH);
 		}
 

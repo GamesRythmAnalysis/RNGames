@@ -69,7 +69,7 @@ public class MainWindowController {
 
 		chooser.setTitle(Locale.getString(MainWindowController.class, "directory.chooser.title")); //$NON-NLS-1$
 
-		if (!this.textAreaSaveDirectory.getText().equals("")) { //$NON-NLS-1$
+		if (!this.textAreaSaveDirectory.getText().isEmpty()) {
 			final File defaultDirectory = new File(this.textAreaSaveDirectory.getText());
 			if (defaultDirectory.exists()) {
 				chooser.setInitialDirectory(defaultDirectory);
@@ -148,14 +148,13 @@ public class MainWindowController {
 		final List<String> errorMessages = new ArrayList<>();
 
 		if (this.textAreaSaveDirectory.getText() == null
-				|| this.textAreaSaveDirectory.getText().length() == 0) {
+				|| this.textAreaSaveDirectory.getText().isEmpty()) {
 			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.save.directory")); //$NON-NLS-1$
 		} else if (!new File(this.textAreaSaveDirectory.getText()).exists()) {
 			errorMessages.add(Locale.getString(MainWindowController.class, "error.invalid.save.directory")); //$NON-NLS-1$
 		}
 
-		if (this.textAreaRecordName.getText() == null
-				|| this.textAreaRecordName.getText().length() == 0) {
+		if (!this.textAreaRecordName.getText().isEmpty()) {
 			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.record.name")); //$NON-NLS-1$
 		}
 
@@ -165,7 +164,7 @@ public class MainWindowController {
 			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.device")); //$NON-NLS-1$
 		}
 
-		if (errorMessages.size() == 0) {
+		if (errorMessages.isEmpty()) {
 			return true;
 		}
 
