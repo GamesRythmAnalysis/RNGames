@@ -27,7 +27,7 @@ public class KeyboardWriter extends KeyboardListener {
 		this.writer = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(fileLocation.getPath()), StandardCharsets.UTF_8));
 
-		this.writer.write(Locale.getString(KeyboardWriter.class, "keyboard.file.header")); //$NON-NLS-1$
+		this.writer.write(Locale.getString(KeyboardWriter.class, "keyboard.file.header") + '\n'); //$NON-NLS-1$
 	}
 
 	@Override
