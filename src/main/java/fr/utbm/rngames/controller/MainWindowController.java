@@ -2,10 +2,12 @@ package fr.utbm.rngames.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.utbm.rngames.Zipper;
 import org.arakhne.afc.vmutil.locale.Locale;
 
 import fr.utbm.rngames.App;
@@ -21,6 +23,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.stage.DirectoryChooser;
 
 public class MainWindowController {
+	private final List<URL> fileLocations = new ArrayList<>();
+
 	private KeyboardWriter kWriter;
 	private MouseWriter mWriter;
 
@@ -40,7 +44,7 @@ public class MainWindowController {
 	private ToggleButton toggleButtonMouse;
 
 	@FXML
-	private ToggleButton toggleButtonGamepad;
+	private ToggleButton toggleButtonGamePad;
 
 	@FXML
 	private Button buttonStartRecording;
@@ -84,14 +88,15 @@ public class MainWindowController {
 	}
 
 	@FXML
-	private void handleStartRecording(@SuppressWarnings("unused") ActionEvent event) {
+	private void handleStartRecording(ActionEvent event) {
 		if (!isReadyToRecord()) {
 			return;
 		}
 
 		if (this.toggleButtonKeyboard.isSelected()) {
 			try {
-				this.kWriter = new KeyboardWriter(new URL("file:///" + this.textAreaSaveDirectory.getText() + "/keyboard.csv"));  //$NON-NLS-1$//$NON-NLS-2$
+				this.fileLocations.add(new URL("file:///" + this.textAreaSaveDirectory.getText() + File.separator + Locale.getString(KeyboardWriter.class, "keyboard.file.name")));
+				this.kWriter = new KeyboardWriter(this.fileLocations.get(this.fileLocations.size() - 1));
 				this.kWriter.start();
 			} catch (final IOException e) {
 				// TODO Auto-generated catch block
@@ -101,7 +106,8 @@ public class MainWindowController {
 
 		if (this.toggleButtonMouse.isSelected()) {
 			try {
-				this.mWriter = new MouseWriter(new URL("file:///" + this.textAreaSaveDirectory.getText() + "/mouse.csv")); //$NON-NLS-1$ //$NON-NLS-2$
+				this.fileLocations.add(new URL("file:///" + this.textAreaSaveDirectory.getText() + File.separator + Locale.getString(MouseWriter.class, "mouse.file.name")));
+				this.mWriter = new MouseWriter(this.fileLocations.get(this.fileLocations.size() - 1));
 				this.mWriter.start();
 			} catch (final IOException e) {
 				// TODO Auto-generated catch block
@@ -112,7 +118,7 @@ public class MainWindowController {
 		this.textAreaSaveDirectory.disableProperty().set(true);
 		this.textAreaRecordName.disableProperty().set(true);
 		this.buttonSelectDirectory.disableProperty().set(true);
-		this.toggleButtonGamepad.disableProperty().set(true);
+		this.toggleButtonGamePad.disableProperty().set(true);
 		this.toggleButtonKeyboard.disableProperty().set(true);
 		this.toggleButtonMouse.disableProperty().set(true);
 		this.buttonStartRecording.disableProperty().set(true);
@@ -120,11 +126,11 @@ public class MainWindowController {
 	}
 
 	@FXML
-	private void handleStopRecording(@SuppressWarnings("unused") ActionEvent event) {
+	private void handleStopRecording(ActionEvent event) {
 		this.textAreaSaveDirectory.disableProperty().set(false);
 		this.textAreaRecordName.disableProperty().set(false);
 		this.buttonSelectDirectory.disableProperty().set(false);
-		this.toggleButtonGamepad.disableProperty().set(false);
+		this.toggleButtonGamePad.disableProperty().set(false);
 		this.toggleButtonKeyboard.disableProperty().set(false);
 		this.toggleButtonMouse.disableProperty().set(false);
 		this.buttonStartRecording.disableProperty().set(false);
@@ -136,6 +142,14 @@ public class MainWindowController {
 
 		if (this.mWriter != null) {
 			this.mWriter.stop();
+		}
+
+		try {
+			Zipper.createZipArchive(new URL("file:///" + this.textAreaSaveDirectory.getText() + File.separator + this.textAreaRecordName.getText()), this.fileLocations);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -154,11 +168,11 @@ public class MainWindowController {
 			errorMessages.add(Locale.getString(MainWindowController.class, "error.invalid.save.directory")); //$NON-NLS-1$
 		}
 
-		if (!this.textAreaRecordName.getText().isEmpty()) {
+		if (this.textAreaRecordName.getText().isEmpty()) {
 			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.record.name")); //$NON-NLS-1$
 		}
 
-		if (!this.toggleButtonGamepad.isSelected()
+		if (!this.toggleButtonGamePad.isSelected()
 				&& !this.toggleButtonKeyboard.isSelected()
 				&& !this.toggleButtonMouse.isSelected()) {
 			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.device")); //$NON-NLS-1$
