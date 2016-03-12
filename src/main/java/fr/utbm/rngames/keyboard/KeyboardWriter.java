@@ -1,6 +1,7 @@
 package fr.utbm.rngames.keyboard;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -19,13 +20,17 @@ public class KeyboardWriter extends KeyboardListener {
 		CSV_SEPARATOR = Locale.getString(KeyboardWriter.class, "keyboard.csv.separator"); //$NON-NLS-1$
 	}
 
-	private final Logger log = Logger.getLogger(KeyboardWriter.class.getName());
+	private final Logger logger = Logger.getLogger(KeyboardWriter.class.getName());
 
 	private final Writer writer;
 
 	public KeyboardWriter(URL fileLocation) throws IOException {
+		File file = new File(fileLocation.getPath());
+		file.createNewFile();
+		file.deleteOnExit();
+
 		this.writer = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(fileLocation.getPath()), StandardCharsets.UTF_8));
+				new FileOutputStream(file), StandardCharsets.UTF_8));
 
 		this.writer.write(Locale.getString(KeyboardWriter.class, "keyboard.file.header") + '\n'); //$NON-NLS-1$
 	}
@@ -35,7 +40,7 @@ public class KeyboardWriter extends KeyboardListener {
 		try {
 			this.writer.close();
 		} catch (IOException exception) {
-			this.log.severe(exception.getMessage());
+			this.logger.severe(exception.getMessage());
 		}
 	}
 
@@ -44,7 +49,7 @@ public class KeyboardWriter extends KeyboardListener {
 		try {
 			this.writer.write(generateFileEntry("Key Down", evt)); //$NON-NLS-1$
 		} catch (IOException exception) {
-			this.log.severe(exception.getMessage());
+			this.logger.severe(exception.getMessage());
 		}
 	}
 
@@ -53,7 +58,7 @@ public class KeyboardWriter extends KeyboardListener {
 		try {
 			this.writer.write(generateFileEntry("Key Up", evt)); //$NON-NLS-1$
 		} catch (IOException exception) {
-			this.log.severe(exception.getMessage());
+			this.logger.severe(exception.getMessage());
 		}
 	}
 
@@ -67,5 +72,4 @@ public class KeyboardWriter extends KeyboardListener {
 				+ NativeKeyEvent.getKeyText(event.getKeyCode()) + CSV_SEPARATOR
 				+ event.getWhen() + "\n"; //$NON-NLS-1$
 	}
-
 }
