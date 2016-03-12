@@ -14,7 +14,7 @@ import org.arakhne.afc.vmutil.locale.Locale;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
 public class KeyboardWriter extends KeyboardListener {
-	private final static String CSV_SEPARATOR;
+	private static final String CSV_SEPARATOR;
 
 	static {
 		CSV_SEPARATOR = Locale.getString(KeyboardWriter.class, "keyboard.csv.separator"); //$NON-NLS-1$

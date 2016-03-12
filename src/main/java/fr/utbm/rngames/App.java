@@ -17,14 +17,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class App extends Application {
-
+	private static final Logger logger = Logger.getLogger(App.class.getName());
 	private Stage primStage;
 	private BorderPane rootLayout;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primStage = primaryStage;
-		this.primStage.setTitle("RNGames"); //$NON-NLS-1$
+		this.primStage.setTitle(org.arakhne.afc.vmutil.locale.Locale.getString(App.class, "stage.title")); //$NON-NLS-1$
 
 		initRootLayout();
 
@@ -55,8 +55,8 @@ public class App extends Application {
 			this.primStage.setScene(scene);
 
 			this.primStage.show();
-		} catch (final IOException e) {
-			e.printStackTrace();
+		} catch (IOException exception) {
+			this.logger.severe(exception.getMessage());
 		}
 	}
 
@@ -77,8 +77,8 @@ public class App extends Application {
 			// Give the controller access to the main app.
 			final MainWindowController controller = loader.getController();
 			controller.setApp(this);
-		} catch (final IOException e) {
-			e.printStackTrace();
+		} catch (IOException exception) {
+			this.logger.severe(exception.getMessage());
 		}
 	}
 
@@ -90,8 +90,8 @@ public class App extends Application {
 
 		try {
 			GlobalScreen.registerNativeHook();
-		} catch (final NativeHookException e) {
-			e.printStackTrace();
+		} catch (NativeHookException exception) {
+			App.logger.severe(exception.getMessage());
 		}
 
 		final Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
@@ -102,9 +102,8 @@ public class App extends Application {
 
 		try {
 			GlobalScreen.unregisterNativeHook();
-		} catch (final NativeHookException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (NativeHookException exception) {
+			App.logger.severe(exception.getMessage());
 		}
 	}
 }

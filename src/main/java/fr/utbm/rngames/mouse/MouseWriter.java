@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 public class MouseWriter extends MouseListener {
-	private final static String CSV_SEPARATOR;
+	private static final String CSV_SEPARATOR;
 
 	static {
 		CSV_SEPARATOR = Locale.getString(MouseWriter.class, "mouse.csv.separator"); //$NON-NLS-1$

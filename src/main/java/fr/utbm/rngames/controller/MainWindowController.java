@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import fr.utbm.rngames.Zipper;
 import org.arakhne.afc.vmutil.locale.Locale;
@@ -23,6 +24,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.stage.DirectoryChooser;
 
 public class MainWindowController {
+	private static final Logger logger = Logger.getLogger(MainWindowController.class.getName());
+
 	private final List<URL> fileLocations = new ArrayList<>();
 
 	private KeyboardWriter kWriter;
@@ -88,7 +91,7 @@ public class MainWindowController {
 	}
 
 	@FXML
-	private void handleStartRecording(ActionEvent event) {
+	private void handleStartRecording() {
 		if (!isReadyToRecord()) {
 			return;
 		}
@@ -98,9 +101,8 @@ public class MainWindowController {
 				this.fileLocations.add(new URL("file:///" + this.textAreaSaveDirectory.getText() + File.separator + Locale.getString(KeyboardWriter.class, "keyboard.file.name")));
 				this.kWriter = new KeyboardWriter(this.fileLocations.get(this.fileLocations.size() - 1));
 				this.kWriter.start();
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IOException exception) {
+				this.logger.severe(exception.getMessage());
 			}
 		}
 
@@ -109,9 +111,8 @@ public class MainWindowController {
 				this.fileLocations.add(new URL("file:///" + this.textAreaSaveDirectory.getText() + File.separator + Locale.getString(MouseWriter.class, "mouse.file.name")));
 				this.mWriter = new MouseWriter(this.fileLocations.get(this.fileLocations.size() - 1));
 				this.mWriter.start();
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IOException exception) {
+				this.logger.severe(exception.getMessage());
 			}
 		}
 
@@ -126,7 +127,7 @@ public class MainWindowController {
 	}
 
 	@FXML
-	private void handleStopRecording(ActionEvent event) {
+	private void handleStopRecording() {
 		this.textAreaSaveDirectory.disableProperty().set(false);
 		this.textAreaRecordName.disableProperty().set(false);
 		this.buttonSelectDirectory.disableProperty().set(false);
@@ -146,10 +147,8 @@ public class MainWindowController {
 
 		try {
 			Zipper.createZipArchive(new URL("file:///" + this.textAreaSaveDirectory.getText() + File.separator + this.textAreaRecordName.getText()), this.fileLocations);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException exception) {
+			this.logger.severe(exception.getMessage());
 		}
 	}
 
