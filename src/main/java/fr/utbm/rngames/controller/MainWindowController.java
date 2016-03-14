@@ -2,19 +2,21 @@ package fr.utbm.rngames.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import fr.utbm.rngames.Zipper;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.fxml.Initializable;
 import org.arakhne.afc.vmutil.locale.Locale;
 
 import fr.utbm.rngames.App;
 import fr.utbm.rngames.keyboard.KeyboardWriter;
 import fr.utbm.rngames.mouse.MouseWriter;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -23,13 +25,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.stage.DirectoryChooser;
 
-public class MainWindowController {
+public class MainWindowController implements Initializable {
 	private final Logger logger = Logger.getLogger(MainWindowController.class.getName());
 
 	private final List<URL> fileLocations = new ArrayList<>();
 
 	private KeyboardWriter kWriter;
 	private MouseWriter mWriter;
+	private final BooleanProperty startDisabled = new SimpleBooleanProperty(false);
 
 	@FXML
 	private TextField textAreaSaveDirectory;
@@ -57,6 +60,19 @@ public class MainWindowController {
 
 	// Reference to the main application
 	private App app;
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		this.textAreaSaveDirectory.disableProperty().bind(this.startDisabled);
+		this.textAreaSaveDirectory.disableProperty().bind(this.startDisabled);
+		this.textAreaRecordName.disableProperty().bind(this.startDisabled);
+		this.buttonSelectDirectory.disableProperty().bind(this.startDisabled);
+		this.toggleButtonGamePad.disableProperty().bind(this.startDisabled);
+		this.toggleButtonKeyboard.disableProperty().bind(this.startDisabled);
+		this.toggleButtonMouse.disableProperty().bind(this.startDisabled);
+		this.buttonStartRecording.disableProperty().bind(this.startDisabled);
+		this.buttonStopRecording.disableProperty().bind(this.startDisabled.not());
+	}
 
 	/**
 	 * Is called by the main application to give a reference back to itself.
@@ -116,26 +132,12 @@ public class MainWindowController {
 			}
 		}
 
-		this.textAreaSaveDirectory.disableProperty().set(true);
-		this.textAreaRecordName.disableProperty().set(true);
-		this.buttonSelectDirectory.disableProperty().set(true);
-		this.toggleButtonGamePad.disableProperty().set(true);
-		this.toggleButtonKeyboard.disableProperty().set(true);
-		this.toggleButtonMouse.disableProperty().set(true);
-		this.buttonStartRecording.disableProperty().set(true);
-		this.buttonStopRecording.disableProperty().set(false);
+		this.startDisabled.set(false);
 	}
 
 	@FXML
 	private void handleStopRecording() {
-		this.textAreaSaveDirectory.disableProperty().set(false);
-		this.textAreaRecordName.disableProperty().set(false);
-		this.buttonSelectDirectory.disableProperty().set(false);
-		this.toggleButtonGamePad.disableProperty().set(false);
-		this.toggleButtonKeyboard.disableProperty().set(false);
-		this.toggleButtonMouse.disableProperty().set(false);
-		this.buttonStartRecording.disableProperty().set(false);
-		this.buttonStopRecording.disableProperty().set(true);
+		this.startDisabled.set(true);
 
 		try (Zipper zipper = new Zipper(new URL("file:///" + this.textAreaSaveDirectory.getText()
 				+ File.separator
