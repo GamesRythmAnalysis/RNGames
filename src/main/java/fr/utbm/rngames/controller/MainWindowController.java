@@ -24,7 +24,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.stage.DirectoryChooser;
 
 public class MainWindowController {
-	private static final Logger logger = Logger.getLogger(MainWindowController.class.getName());
+	private final Logger logger = Logger.getLogger(MainWindowController.class.getName());
 
 	private final List<URL> fileLocations = new ArrayList<>();
 

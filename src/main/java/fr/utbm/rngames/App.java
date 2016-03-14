@@ -56,7 +56,7 @@ public class App extends Application {
 
 			this.primStage.show();
 		} catch (IOException exception) {
-			this.logger.severe(exception.getMessage());
+			App.logger.severe(exception.getMessage());
 		}
 	}
 
@@ -78,7 +78,7 @@ public class App extends Application {
 			final MainWindowController controller = loader.getController();
 			controller.setApp(this);
 		} catch (IOException exception) {
-			this.logger.severe(exception.getMessage());
+			App.logger.severe(exception.getMessage());
 		}
 	}
 
