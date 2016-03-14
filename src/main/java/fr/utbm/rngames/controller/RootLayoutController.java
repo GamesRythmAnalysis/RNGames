@@ -14,6 +14,7 @@ public class RootLayoutController {
 	/**
 	 * Opens an about dialog.
 	 */
+	@SuppressWarnings("MethodMayBeStatic")
 	@FXML
 	private void handleAbout() {
 		final Alert alert = new Alert(AlertType.INFORMATION);
@@ -27,6 +28,7 @@ public class RootLayoutController {
 	/**
 	 * Closes the application.
 	 */
+	@SuppressWarnings("MethodMayBeStatic")
 	@FXML
 	private void handleExit(ActionEvent event) {
 		Node node = (Node) event.getSource();

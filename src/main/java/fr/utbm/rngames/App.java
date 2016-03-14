@@ -32,8 +32,7 @@ public class App extends Application {
 	}
 
 	/**
-	 * Returns the main stage.
-	 * @return
+	 * @return Returns the main stage.
 	 */
 	public Stage getPrimaryStage() {
 		return this.primStage;

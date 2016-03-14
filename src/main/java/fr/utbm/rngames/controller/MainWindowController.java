@@ -28,8 +28,6 @@ import javafx.stage.DirectoryChooser;
 public class MainWindowController implements Initializable {
 	private final Logger logger = Logger.getLogger(MainWindowController.class.getName());
 
-	private final List<URL> fileLocations = new ArrayList<>();
-
 	private KeyboardWriter kWriter;
 	private MouseWriter mWriter;
 	private final BooleanProperty startDisabled = new SimpleBooleanProperty(false);
@@ -77,7 +75,7 @@ public class MainWindowController implements Initializable {
 	/**
 	 * Is called by the main application to give a reference back to itself.
 	 *
-	 * @param app
+	 * @param app - application
 	 */
 	public void setApp(App app) {
 		this.app = app;
@@ -114,8 +112,10 @@ public class MainWindowController implements Initializable {
 
 		if (this.toggleButtonKeyboard.isSelected()) {
 			try {
-				this.fileLocations.add(new URL("file:///" + this.textAreaSaveDirectory.getText() + File.separator + Locale.getString(KeyboardWriter.class, "keyboard.file.name")));
-				this.kWriter = new KeyboardWriter(this.fileLocations.get(this.fileLocations.size() - 1));
+				this.kWriter = new KeyboardWriter(new URL("file:///" + this.textAreaSaveDirectory.getText()
+						+ File.separator
+						+ Locale.getString(KeyboardWriter.class, "keyboard.file.name")));
+
 				this.kWriter.start();
 			} catch (IOException exception) {
 				this.logger.severe(exception.getMessage());
@@ -124,8 +124,10 @@ public class MainWindowController implements Initializable {
 
 		if (this.toggleButtonMouse.isSelected()) {
 			try {
-				this.fileLocations.add(new URL("file:///" + this.textAreaSaveDirectory.getText() + File.separator + Locale.getString(MouseWriter.class, "mouse.file.name")));
-				this.mWriter = new MouseWriter(this.fileLocations.get(this.fileLocations.size() - 1));
+				this.mWriter = new MouseWriter(new URL("file:///" + this.textAreaSaveDirectory.getText()
+						+ File.separator
+						+ Locale.getString(MouseWriter.class, "mouse.file.name")));
+
 				this.mWriter.start();
 			} catch (IOException exception) {
 				this.logger.severe(exception.getMessage());
@@ -197,5 +199,4 @@ public class MainWindowController implements Initializable {
 
 		return false;
 	}
-
 }
