@@ -2,35 +2,39 @@ package fr.utbm.rngames;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class Zipper {
-    public static void createZipArchive(URL destination, List<URL> files) throws IOException {
-        byte[] buffer = new byte[1024];
-        ZipOutputStream zipFile = new ZipOutputStream(new FileOutputStream(destination.getPath()));
+public class Zipper implements AutoCloseable {
+    private final byte[] buffer = new byte[1024];
+    private final ZipOutputStream zipFile;
 
-        for (URL fileURL : files) {
-            File entry = new File(fileURL.getPath());
+    public Zipper(URL destination) throws FileNotFoundException {
+        this.zipFile = new ZipOutputStream(new FileOutputStream(destination.getPath()));
+    }
 
-            FileInputStream input = new FileInputStream(entry);
+    public void addFile(URL file) throws IOException {
+        File entry = new File(file.getPath());
 
-            zipFile.putNextEntry(new ZipEntry(entry.getName()));
+        try (FileInputStream input = new FileInputStream(entry)) {
+            this.zipFile.putNextEntry(new ZipEntry(entry.getName()));
 
-            int length;
-
-            while ((length = input.read(buffer)) > 0) {
-                zipFile.write(buffer, 0, length);
+            int length = input.read(this.buffer);
+            while (length > 0) {
+                this.zipFile.write(this.buffer, 0, length);
             }
 
-            zipFile.closeEntry();
-            input.close();
+            this.zipFile.closeEntry();
         }
 
-        zipFile.close();
+    }
+
+    @Override
+    public void close() throws IOException {
+        this.zipFile.close();
     }
 }

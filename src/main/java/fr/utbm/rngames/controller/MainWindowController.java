@@ -137,16 +137,18 @@ public class MainWindowController {
 		this.buttonStartRecording.disableProperty().set(false);
 		this.buttonStopRecording.disableProperty().set(true);
 
-		if (this.kWriter != null) {
-			this.kWriter.stop();
-		}
+		try (Zipper zipper = new Zipper(new URL("file:///" + this.textAreaSaveDirectory.getText()
+				+ File.separator
+				+ this.textAreaRecordName.getText()))) {
+			if (this.kWriter != null) {
+				zipper.addFile(this.kWriter.getFileLocation());
+				this.kWriter.stop();
+			}
 
-		if (this.mWriter != null) {
-			this.mWriter.stop();
-		}
-
-		try {
-			Zipper.createZipArchive(new URL("file:///" + this.textAreaSaveDirectory.getText() + File.separator + this.textAreaRecordName.getText()), this.fileLocations);
+			if (this.mWriter != null) {
+				zipper.addFile(this.mWriter.getFileLocation());
+				this.mWriter.stop();
+			}
 		} catch (IOException exception) {
 			this.logger.severe(exception.getMessage());
 		}
