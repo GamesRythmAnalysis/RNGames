@@ -5,13 +5,16 @@ import org.arakhne.afc.vmutil.locale.Locale;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.event.ActionEvent;
+import javafx.scene.Node;
+import javafx.stage.Stage;
 
-@SuppressWarnings("static-method")
 public class RootLayoutController {
 
 	/**
 	 * Opens an about dialog.
 	 */
+	@SuppressWarnings("MethodMayBeStatic")
 	@FXML
 	private void handleAbout() {
 		final Alert alert = new Alert(AlertType.INFORMATION);
@@ -25,9 +28,13 @@ public class RootLayoutController {
 	/**
 	 * Closes the application.
 	 */
+	@SuppressWarnings("MethodMayBeStatic")
 	@FXML
-	private void handleExit() {
-		System.exit(0);
+	private void handleExit(ActionEvent event) {
+		Node node = (Node) event.getSource();
+		Stage stage = (Stage) node.getScene().getWindow();
+
+		stage.close();
 	}
 
 }

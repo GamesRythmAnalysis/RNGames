@@ -45,3 +45,5 @@ build/projectRefs/*
 
 # Maven build
 target/*
+.idea/*
+**.iml

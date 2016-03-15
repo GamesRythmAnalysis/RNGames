@@ -4,19 +4,19 @@ import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 public abstract class KeyboardListener implements NativeKeyListener {
-	protected void register() {
+	private void register() {
 		GlobalScreen.addNativeKeyListener(this);
 	}
 
-	protected void unregister() {
+	private void unregister() {
 		GlobalScreen.removeNativeKeyListener(this);
 	}
 
-	public void start() {
+	public final void start() {
 		register();
 	}
 
-	public void stop() {
+	public final void stop() {
 		unregister();
 		close();
 	}

@@ -7,23 +7,23 @@ import org.jnativehook.mouse.NativeMouseWheelListener;
 
 public abstract class MouseListener implements NativeMouseListener, NativeMouseMotionListener, NativeMouseWheelListener {
 
-	protected void register() {
+	private void register() {
 		GlobalScreen.addNativeMouseListener(this);
 		GlobalScreen.addNativeMouseMotionListener(this);
 		GlobalScreen.addNativeMouseWheelListener(this);
 	}
 
-	protected void unregister() {
+	private void unregister() {
 		GlobalScreen.removeNativeMouseListener(this);
 		GlobalScreen.removeNativeMouseMotionListener(this);
 		GlobalScreen.removeNativeMouseWheelListener(this);
 	}
 
-	public void start() {
+	public final void start() {
 		register();
 	}
 
-	public void stop() {
+	public final void stop() {
 		unregister();
 		close();
 	}

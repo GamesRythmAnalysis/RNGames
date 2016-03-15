@@ -32,7 +32,7 @@
                   <Label text="%label.device" />
                   <ToggleButton fx:id="toggleButtonKeyboard" mnemonicParsing="false" text="%button.keyboard" />
                   <ToggleButton fx:id="toggleButtonMouse" mnemonicParsing="false" text="%button.mouse" />
-                  <ToggleButton fx:id="toggleButtonGamepad" mnemonicParsing="false" text="%button.gamepad" />
+                  <ToggleButton fx:id="toggleButtonGamePad" mnemonicParsing="false" text="%button.gamepad" />
                </children>
             </HBox>
             <HBox alignment="CENTER" spacing="10.0">
