@@ -1,6 +1,9 @@
 package fr.utbm.rngames;
 
+import fr.utbm.rngames.controller.CloseEvent;
+import fr.utbm.rngames.controller.CloseEventListener;
 import fr.utbm.rngames.controller.MainWindowController;
+import fr.utbm.rngames.event.EventDispatcher;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,10 +19,14 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class App extends Application {
+public class App extends Application implements CloseEventListener {
 	private static final Logger logger = Logger.getLogger(App.class.getName());
 	private Stage primStage;
 	private BorderPane rootLayout;
+
+	public App() {
+		EventDispatcher.getInstance().listen(CloseEvent.class, this);
+	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -104,5 +111,11 @@ public class App extends Application {
 		} catch (NativeHookException exception) {
 			App.logger.severe(exception.getMessage());
 		}
+	}
+
+	@Override
+	public void handleCloseEvent() {
+		EventDispatcher.getInstance().removeListener(CloseEvent.class, this);
+		primStage.close();
 	}
 }
