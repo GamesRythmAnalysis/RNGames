@@ -192,6 +192,8 @@ public class MainWindowController implements Initializable, CloseEventListener {
 
 		if (this.textAreaRecordName.getText().isEmpty()) {
 			errorMessages.add(Locale.getString("error.no.record.name")); //$NON-NLS-1$
+		} else if (new File(this.textAreaSaveDirectory.getText() + "/" + this.textAreaRecordName.getText()).exists()) {
+			errorMessages.add(Locale.getString("error.record.already.existing")); //$NON-NLS-1$
 		}
 
 		if (!this.toggleButtonGamePad.isSelected()
@@ -200,7 +202,6 @@ public class MainWindowController implements Initializable, CloseEventListener {
 			errorMessages.add(Locale.getString("error.no.device")); //$NON-NLS-1$
 		}
 
-		// TODO: add check for record name already existing.
 		if (errorMessages.isEmpty()) {
 			return true;
 		}
