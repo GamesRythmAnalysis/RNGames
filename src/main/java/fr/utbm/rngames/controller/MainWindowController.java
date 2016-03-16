@@ -74,7 +74,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 		this.buttonStartRecording.disableProperty().bind(this.startDisabled);
 		this.buttonStopRecording.disableProperty().bind(this.startDisabled.not());
 
-		EventDispatcher.getInstance().listen(CloseEvent.class, this);
+		EventDispatcher.getInstance().addListener(CloseEvent.class, this);
 	}
 
 	/**
