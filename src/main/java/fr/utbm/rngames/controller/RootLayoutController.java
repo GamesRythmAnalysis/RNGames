@@ -1,16 +1,13 @@
 package fr.utbm.rngames.controller;
 
-import org.arakhne.afc.vmutil.locale.Locale;
-
+import fr.utbm.rngames.event.EventDispatcher;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.event.ActionEvent;
-import javafx.scene.Node;
-import javafx.stage.Stage;
+import org.arakhne.afc.vmutil.locale.Locale;
 
 public class RootLayoutController {
-
 	/**
 	 * Opens an about dialog.
 	 */
@@ -31,10 +28,7 @@ public class RootLayoutController {
 	@SuppressWarnings("MethodMayBeStatic")
 	@FXML
 	private void handleExit(ActionEvent event) {
-		Node node = (Node) event.getSource();
-		Stage stage = (Stage) node.getScene().getWindow();
-
-		stage.close();
+		EventDispatcher.getInstance().notify(new CloseEvent());
 	}
 
 }
