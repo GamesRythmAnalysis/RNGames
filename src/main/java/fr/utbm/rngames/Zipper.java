@@ -1,5 +1,7 @@
 package fr.utbm.rngames;
 
+import org.arakhne.afc.vmutil.locale.Locale;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,6 +12,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Zipper implements AutoCloseable {
+	public static final String EXTENSION_NAME = Locale.getString("save.extension.name");
+
     private final byte[] buffer = new byte[1024];
     private final ZipOutputStream zipFile;
 

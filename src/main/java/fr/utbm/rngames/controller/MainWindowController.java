@@ -1,30 +1,31 @@
 package fr.utbm.rngames.controller;
 
+import fr.utbm.rngames.App;
+import fr.utbm.rngames.Zipper;
+import fr.utbm.rngames.event.EventDispatcher;
+import fr.utbm.rngames.keyboard.KeyboardWriter;
+import fr.utbm.rngames.mouse.MouseWriter;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.stage.DirectoryChooser;
+import org.arakhne.afc.vmutil.locale.Locale;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-
-import fr.utbm.rngames.Zipper;
-import fr.utbm.rngames.event.EventDispatcher;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.fxml.Initializable;
-import org.arakhne.afc.vmutil.locale.Locale;
-
-import fr.utbm.rngames.App;
-import fr.utbm.rngames.keyboard.KeyboardWriter;
-import fr.utbm.rngames.mouse.MouseWriter;
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.stage.DirectoryChooser;
 
 public class MainWindowController implements Initializable, CloseEventListener {
 
@@ -160,7 +161,8 @@ public class MainWindowController implements Initializable, CloseEventListener {
 	private void stopAndZip() {
 		try (Zipper zipper = new Zipper(new URL("file:///" + this.textAreaSaveDirectory.getText()
 				+ File.separator
-				+ this.textAreaRecordName.getText()))) {
+				+ this.textAreaRecordName.getText()
+				+ Zipper.EXTENSION_NAME))) {
 			if (this.kWriter != null) {
 				this.kWriter.stop();
 				zipper.addFile(this.kWriter.getFileLocation());
@@ -192,8 +194,6 @@ public class MainWindowController implements Initializable, CloseEventListener {
 
 		if (this.textAreaRecordName.getText().isEmpty()) {
 			errorMessages.add(Locale.getString("error.no.record.name")); //$NON-NLS-1$
-		} else if (new File(this.textAreaSaveDirectory.getText() + "/" + this.textAreaRecordName.getText()).exists()) {
-			errorMessages.add(Locale.getString("error.record.already.existing")); //$NON-NLS-1$
 		}
 
 		if (!this.toggleButtonGamePad.isSelected()
@@ -202,20 +202,37 @@ public class MainWindowController implements Initializable, CloseEventListener {
 			errorMessages.add(Locale.getString("error.no.device")); //$NON-NLS-1$
 		}
 
-		if (errorMessages.isEmpty()) {
-			return true;
+		if (!errorMessages.isEmpty()) {
+			// Show the error message.
+			final Alert alert = new Alert(AlertType.ERROR);
+			alert.initOwner(this.app.getPrimaryStage());
+			alert.setTitle(Locale.getString("alert.error.title")); //$NON-NLS-1$
+			alert.setHeaderText(Locale.getString("alert.error.header")); //$NON-NLS-1$
+			alert.setContentText(String.join("\n", errorMessages)); //$NON-NLS-1$);
+
+			alert.showAndWait();
+
+			return false;
 		}
 
-		// Show the error message.
-		final Alert alert = new Alert(AlertType.ERROR);
-		alert.initOwner(this.app.getPrimaryStage());
-		alert.setTitle(Locale.getString("alert.error.title")); //$NON-NLS-1$
-		alert.setHeaderText(Locale.getString("alert.error.header")); //$NON-NLS-1$
-		alert.setContentText(String.join("\n", errorMessages)); //$NON-NLS-1$);
+		if (new File(this.textAreaSaveDirectory.getText() + "/"
+				+ this.textAreaRecordName.getText() + Zipper.EXTENSION_NAME).exists()) {
+			// Show the confirmation message.
+			final Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.getButtonTypes().set(0, ButtonType.YES);
+			alert.getButtonTypes().set(1, ButtonType.NO);
+			alert.initOwner(this.app.getPrimaryStage());
+			alert.setTitle(Locale.getString("alert.record.already.existing.title")); //$NON-NLS-1$
+			alert.setHeaderText(Locale.getString("alert.record.already.existing.header")); //$NON-NLS-1$
+			alert.setContentText(Locale.getString("alert.record.already.existing.content")); //$NON-NLS-1$);
 
-		alert.showAndWait();
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.NO) {
+				return false;
+			}
+		}
 
-		return false;
+		return true;
 	}
 
 }
