@@ -27,7 +27,7 @@ public class RootLayoutController {
 	 */
 	@SuppressWarnings("MethodMayBeStatic")
 	@FXML
-	private void handleExit(ActionEvent event) {
+	private void handleExit() {
 		EventDispatcher.getInstance().notify(new CloseEvent());
 	}
 
