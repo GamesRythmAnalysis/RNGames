@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
@@ -36,6 +37,12 @@ public class App extends Application implements CloseEventListener {
 		initRootLayout();
 
 		showMainWindow();
+
+		primaryStage.setOnCloseRequest(
+			we -> {
+				EventDispatcher.getInstance().notify(new CloseEvent());
+			}
+		);
 	}
 
 	/**

@@ -25,7 +25,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.stage.DirectoryChooser;
 
-public class MainWindowController implements Initializable {
+public class MainWindowController implements Initializable, CloseEventListener {
+
 	private final Logger logger = Logger.getLogger(MainWindowController.class.getName());
 
 	private KeyboardWriter kWriter;
@@ -140,18 +141,31 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private void handleStopRecording() {
 		this.startDisabled.set(false);
+		stopAndZip();
+	}
 
+	@Override
+	public void handleCloseEvent() {
+		if (!this.startDisabled.get()) {
+			stopAndZip();
+		}
+	}
+
+	/**
+	 * Helper method to stop recording and zip data.
+	 */
+	private void stopAndZip() {
 		try (Zipper zipper = new Zipper(new URL("file:///" + this.textAreaSaveDirectory.getText()
 				+ File.separator
 				+ this.textAreaRecordName.getText()))) {
 			if (this.kWriter != null) {
-				zipper.addFile(this.kWriter.getFileLocation());
 				this.kWriter.stop();
+				zipper.addFile(this.kWriter.getFileLocation());
 			}
 
 			if (this.mWriter != null) {
-				zipper.addFile(this.mWriter.getFileLocation());
 				this.mWriter.stop();
+				zipper.addFile(this.mWriter.getFileLocation());
 			}
 		} catch (IOException exception) {
 			this.logger.severe(exception.getMessage());
@@ -199,4 +213,5 @@ public class MainWindowController implements Initializable {
 
 		return false;
 	}
+
 }
