@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import fr.utbm.rngames.Zipper;
+import fr.utbm.rngames.event.EventDispatcher;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.Initializable;
@@ -71,6 +72,8 @@ public class MainWindowController implements Initializable, CloseEventListener {
 		this.toggleButtonMouse.disableProperty().bind(this.startDisabled);
 		this.buttonStartRecording.disableProperty().bind(this.startDisabled);
 		this.buttonStopRecording.disableProperty().bind(this.startDisabled.not());
+
+		EventDispatcher.getInstance().listen(CloseEvent.class, this);
 	}
 
 	/**
@@ -89,7 +92,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 	private void handleSelectFolder() {
 		final DirectoryChooser chooser = new DirectoryChooser();
 
-		chooser.setTitle(Locale.getString(MainWindowController.class, "directory.chooser.title")); //$NON-NLS-1$
+		chooser.setTitle(Locale.getString("directory.chooser.title")); //$NON-NLS-1$
 
 		if (!this.textAreaSaveDirectory.getText().isEmpty()) {
 			final File defaultDirectory = new File(this.textAreaSaveDirectory.getText());
@@ -146,7 +149,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 
 	@Override
 	public void handleCloseEvent() {
-		if (!this.startDisabled.get()) {
+		if (this.startDisabled.get()) {
 			stopAndZip();
 		}
 	}
@@ -182,19 +185,19 @@ public class MainWindowController implements Initializable, CloseEventListener {
 
 		if (this.textAreaSaveDirectory.getText() == null
 				|| this.textAreaSaveDirectory.getText().isEmpty()) {
-			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.save.directory")); //$NON-NLS-1$
+			errorMessages.add(Locale.getString("error.no.save.directory")); //$NON-NLS-1$
 		} else if (!new File(this.textAreaSaveDirectory.getText()).exists()) {
-			errorMessages.add(Locale.getString(MainWindowController.class, "error.invalid.save.directory")); //$NON-NLS-1$
+			errorMessages.add(Locale.getString("error.invalid.save.directory")); //$NON-NLS-1$
 		}
 
 		if (this.textAreaRecordName.getText().isEmpty()) {
-			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.record.name")); //$NON-NLS-1$
+			errorMessages.add(Locale.getString("error.no.record.name")); //$NON-NLS-1$
 		}
 
 		if (!this.toggleButtonGamePad.isSelected()
 				&& !this.toggleButtonKeyboard.isSelected()
 				&& !this.toggleButtonMouse.isSelected()) {
-			errorMessages.add(Locale.getString(MainWindowController.class, "error.no.device")); //$NON-NLS-1$
+			errorMessages.add(Locale.getString("error.no.device")); //$NON-NLS-1$
 		}
 
 		// TODO: add check for record name already existing.
@@ -205,8 +208,8 @@ public class MainWindowController implements Initializable, CloseEventListener {
 		// Show the error message.
 		final Alert alert = new Alert(AlertType.ERROR);
 		alert.initOwner(this.app.getPrimaryStage());
-		alert.setTitle(Locale.getString(MainWindowController.class, "alert.error.title")); //$NON-NLS-1$
-		alert.setHeaderText(Locale.getString(MainWindowController.class, "alert.error.header")); //$NON-NLS-1$
+		alert.setTitle(Locale.getString("alert.error.title")); //$NON-NLS-1$
+		alert.setHeaderText(Locale.getString("alert.error.header")); //$NON-NLS-1$
 		alert.setContentText(String.join("\n", errorMessages)); //$NON-NLS-1$);
 
 		alert.showAndWait();

@@ -30,14 +30,17 @@ public class EventDispatcher {
 		}
 	}
 
-	public <T extends EventListener> void removeListener(Class<? extends Event<T>> eventClass, T listener) {
+	public <T extends EventListener> boolean removeListener(Class<? extends Event<T>> eventClass, T listener) {
 		assert (this.eventMap.containsKey(eventClass));
 
+		boolean removed;
 		List<T> listeners = getListeners(eventClass);
 
 		synchronized (this.eventMap) {
-			listeners.remove(listener);
+			removed = listeners.remove(listener);
 		}
+
+		return removed;
 	}
 
 	public <T extends EventListener> void notify(Event<T> event) {

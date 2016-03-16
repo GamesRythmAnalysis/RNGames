@@ -17,7 +17,7 @@ public class MouseWriter extends MouseListener {
 	private static final String CSV_SEPARATOR;
 
 	static {
-		CSV_SEPARATOR = Locale.getString(MouseWriter.class, "mouse.csv.separator"); //$NON-NLS-1$
+		CSV_SEPARATOR = Locale.getString("mouse.csv.separator"); //$NON-NLS-1$
 	}
 
 	private final Logger logger = Logger.getLogger(MouseWriter.class.getName());
@@ -36,7 +36,7 @@ public class MouseWriter extends MouseListener {
 		this.writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),
 				StandardCharsets.UTF_8));
 
-		this.writer.write(Locale.getString(MouseWriter.class, "mouse.file.header"));
+		this.writer.write(Locale.getString("mouse.file.header"));
 		this.writer.newLine();
 	}
 
