@@ -116,6 +116,6 @@ public class App extends Application implements CloseEventListener {
 	@Override
 	public void handleCloseEvent() {
 		EventDispatcher.getInstance().removeListener(CloseEvent.class, this);
-		primStage.close();
+		this.primStage.close();
 	}
 }
