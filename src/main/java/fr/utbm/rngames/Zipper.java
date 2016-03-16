@@ -23,8 +23,8 @@ public class Zipper implements AutoCloseable {
         try (FileInputStream input = new FileInputStream(entry)) {
             this.zipFile.putNextEntry(new ZipEntry(entry.getName()));
 
-            int length = input.read(this.buffer);
-            while (length > 0) {
+            int length;
+            while ((length = input.read(this.buffer)) > 0) {
                 this.zipFile.write(this.buffer, 0, length);
             }
 
