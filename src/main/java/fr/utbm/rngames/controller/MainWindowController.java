@@ -134,12 +134,12 @@ public class MainWindowController implements Initializable {
 			}
 		}
 
-		this.startDisabled.set(false);
+		this.startDisabled.set(true);
 	}
 
 	@FXML
 	private void handleStopRecording() {
-		this.startDisabled.set(true);
+		this.startDisabled.set(false);
 
 		try (Zipper zipper = new Zipper(new URL("file:///" + this.textAreaSaveDirectory.getText()
 				+ File.separator

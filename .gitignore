@@ -8,6 +8,10 @@ bin
 .settings
 .metadata
 
+# Intellij
+.idea/*
+**.iml
+
 # Subversion and CVS
 .svn
 .cvs
@@ -45,5 +49,4 @@ build/projectRefs/*
 
 # Maven build
 target/*
-.idea/*
-**.iml
+
