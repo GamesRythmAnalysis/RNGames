@@ -1,7 +1,6 @@
 package fr.utbm.rngames.controller;
 
 import fr.utbm.rngames.event.EventDispatcher;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
