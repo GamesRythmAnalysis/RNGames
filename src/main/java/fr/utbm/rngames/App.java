@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
@@ -26,7 +25,7 @@ public class App extends Application implements CloseEventListener {
 	private BorderPane rootLayout;
 
 	public App() {
-		EventDispatcher.getInstance().listen(CloseEvent.class, this);
+		EventDispatcher.getInstance().addListener(CloseEvent.class, this);
 	}
 
 	@Override
@@ -40,7 +39,8 @@ public class App extends Application implements CloseEventListener {
 
 		primaryStage.setOnCloseRequest(
 			we -> {
-				EventDispatcher.getInstance().notify(new CloseEvent());
+				EventDispatcher.getInstance().removeListener(CloseEvent.class, this);
+				EventDispatcher.getInstance().fire(new CloseEvent());
 			}
 		);
 	}
@@ -110,7 +110,7 @@ public class App extends Application implements CloseEventListener {
 		}
 
 		final Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-		logger.setLevel(Level.WARNING);
+		logger.setLevel(Level.OFF);
 		logger.setUseParentHandlers(false);
 
 		launch(args);
