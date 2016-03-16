@@ -15,9 +15,9 @@ public class RootLayoutController {
 	@FXML
 	private void handleAbout() {
 		final Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle(Locale.getString(RootLayoutController.class, "alert.about.title")); //$NON-NLS-1$
-		alert.setHeaderText(Locale.getString(RootLayoutController.class, "alert.about.header")); //$NON-NLS-1$
-		alert.setContentText(Locale.getString(RootLayoutController.class, "alert.about.content.text")); //$NON-NLS-1$
+		alert.setTitle(Locale.getString("alert.about.title")); //$NON-NLS-1$
+		alert.setHeaderText(Locale.getString("alert.about.header")); //$NON-NLS-1$
+		alert.setContentText(Locale.getString("alert.about.content.text")); //$NON-NLS-1$
 
 		alert.showAndWait();
 	}

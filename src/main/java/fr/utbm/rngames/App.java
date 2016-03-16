@@ -31,7 +31,7 @@ public class App extends Application implements CloseEventListener {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primStage = primaryStage;
-		this.primStage.setTitle(org.arakhne.afc.vmutil.locale.Locale.getString(App.class, "stage.title")); //$NON-NLS-1$
+		this.primStage.setTitle(org.arakhne.afc.vmutil.locale.Locale.getString("stage.title")); //$NON-NLS-1$
 
 		initRootLayout();
 
@@ -53,7 +53,8 @@ public class App extends Application implements CloseEventListener {
 			// Load root layout from fxml file.
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(App.class.getResource("templates/RootLayout_i18n/RootLayout_i18n.fxml")); //$NON-NLS-1$
-			loader.setResources(ResourceBundle.getBundle("fr.utbm.rngames.templates.RootLayout_i18n.RootLayout", Locale.getDefault())); //$NON-NLS-1$
+			loader.setResources(ResourceBundle.getBundle("fr.utbm.rngames.templates.RootLayout_i18n.RootLayout", //$NON-NLS-1$
+					Locale.getDefault()));
 			this.rootLayout = loader.load();
 
 			// Show the scene containing the root layout.
@@ -74,7 +75,8 @@ public class App extends Application implements CloseEventListener {
 			// Load person overview.
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(App.class.getResource("templates/MainWindow_i18n/MainWindow_i18n.fxml")); //$NON-NLS-1$
-			loader.setResources(ResourceBundle.getBundle("fr.utbm.rngames.templates.MainWindow_i18n.MainWindow", Locale.getDefault())); //$NON-NLS-1$
+			loader.setResources(ResourceBundle.getBundle("fr.utbm.rngames.templates.MainWindow_i18n.MainWindow", //$NON-NLS-1$
+					Locale.getDefault()));
 			final AnchorPane mainWindow = loader.load();
 
 			// Set person overview into the center of root layout.
@@ -115,7 +117,6 @@ public class App extends Application implements CloseEventListener {
 
 	@Override
 	public void handleCloseEvent() {
-		EventDispatcher.getInstance().removeListener(CloseEvent.class, this);
-		primStage.close();
+		this.primStage.close();
 	}
 }

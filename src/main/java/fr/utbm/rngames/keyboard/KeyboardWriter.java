@@ -16,7 +16,7 @@ public class KeyboardWriter extends KeyboardListener {
 	private static final String CSV_SEPARATOR;
 
 	static {
-		CSV_SEPARATOR = Locale.getString(KeyboardWriter.class, "keyboard.csv.separator"); //$NON-NLS-1$
+		CSV_SEPARATOR = Locale.getString("keyboard.csv.separator"); //$NON-NLS-1$
 	}
 
 	private final Logger logger = Logger.getLogger(KeyboardWriter.class.getName());
@@ -35,7 +35,7 @@ public class KeyboardWriter extends KeyboardListener {
 		this.writer = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(file), StandardCharsets.UTF_8));
 
-		this.writer.write(Locale.getString(KeyboardWriter.class, "keyboard.file.header"));
+		this.writer.write(Locale.getString("keyboard.file.header"));
 		this.writer.newLine();
 	}
 
