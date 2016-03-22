@@ -22,10 +22,12 @@ public class MouseWriter extends MouseListener {
 
 	private final Logger logger = Logger.getLogger(MouseWriter.class.getName());
 
+	private final long startTime;
 	private final URL fileLocation;
 	private final BufferedWriter writer;
 
 	public MouseWriter(URL fileLocation) throws IOException {
+		this.startTime = System.currentTimeMillis();
 		this.fileLocation = fileLocation;
 		File file = new File(getFileLocation().getPath());
 
@@ -107,31 +109,31 @@ public class MouseWriter extends MouseListener {
 		return this.fileLocation;
 	}
 
-	private static String generateMouseButtonEntry(String eventType, NativeMouseEvent evt) {
+	private String generateMouseButtonEntry(String eventType, NativeMouseEvent evt) {
 		return "mouse " + evt.getButton() + " " +  eventType + CSV_SEPARATOR //$NON-NLS-1$ //$NON-NLS-2$
 				+ evt.getX() + CSV_SEPARATOR
 				+ evt.getY() + CSV_SEPARATOR
-				+ evt.getWhen();
+				+ (evt.getWhen() - this.startTime);
 	}
 
-	private static String generateMouseButtonEntry(NativeMouseWheelEvent evt) {
+	private String generateMouseButtonEntry(NativeMouseWheelEvent evt) {
 		if (evt.getWheelRotation() > 0) {
 			return "mouse scroll down" + CSV_SEPARATOR //$NON-NLS-1$
 					+ evt.getX() + CSV_SEPARATOR
 					+ evt.getY() + CSV_SEPARATOR
-					+ evt.getWhen();
+					+ (evt.getWhen() - this.startTime);
 		}
 
 		return "mouse scroll up" + CSV_SEPARATOR //$NON-NLS-1$
 				+ evt.getX() + CSV_SEPARATOR
 				+ evt.getY() + CSV_SEPARATOR
-				+ evt.getWhen();
+				+ (evt.getWhen() - this.startTime);
 	}
 
-	private static String generateMouseMoveEntry(NativeMouseEvent evt) {
+	private String generateMouseMoveEntry(NativeMouseEvent evt) {
 		return "mouse move" + CSV_SEPARATOR //$NON-NLS-1$
 				+ evt.getX() + CSV_SEPARATOR
 				+ evt.getY() + CSV_SEPARATOR
-				+ evt.getWhen();
+				+ (evt.getWhen() - this.startTime);
 	}
 }

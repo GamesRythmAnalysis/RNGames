@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 
 public class KeyboardWriter extends KeyboardListener {
 	private static final String CSV_SEPARATOR;
-	private final List<Integer> keysPressed = new ArrayList<>();
 
 	static {
 		CSV_SEPARATOR = Locale.getString("keyboard.csv.separator"); //$NON-NLS-1$
@@ -24,10 +23,13 @@ public class KeyboardWriter extends KeyboardListener {
 
 	private final Logger logger = Logger.getLogger(KeyboardWriter.class.getName());
 
+	private final List<Integer> keysPressed = new ArrayList<>();
+	private final long startTime;
 	private final URL fileLocation;
 	private final BufferedWriter writer;
 
 	public KeyboardWriter(URL fileLocation) throws IOException {
+		this.startTime = System.currentTimeMillis();
 		this.fileLocation = fileLocation;
 		File file = new File(this.fileLocation.getPath());
 
@@ -84,9 +86,9 @@ public class KeyboardWriter extends KeyboardListener {
 		return this.fileLocation;
 	}
 
-	private static String generateFileEntry(String eventType, NativeKeyEvent event) {
+	private String generateFileEntry(String eventType, NativeKeyEvent event) {
 		return eventType + CSV_SEPARATOR
 				+ NativeKeyEvent.getKeyText(event.getKeyCode()) + CSV_SEPARATOR
-				+ event.getWhen();
+				+ (event.getWhen() - this.startTime);
 	}
 }
