@@ -65,6 +65,9 @@ public class MainWindowController implements Initializable, CloseEventListener {
 	// Reference to the main application
 	private App app;
 
+	// current date + record name
+	private String fullRecordName;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.textAreaSaveDirectory.disableProperty().bind(this.startDisabled);
@@ -163,26 +166,23 @@ public class MainWindowController implements Initializable, CloseEventListener {
 	 * Helper method to stop recording and zip data.
 	 */
 	private void stopAndZip() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-		String currentDate = dateFormat.format(new Date());
 		try (Zipper zipper = new Zipper(new URL("file:///" + this.textAreaSaveDirectory.getText()
 				+ File.separator
-				+ currentDate + "."
-				+ this.textAreaRecordName.getText()
+				+ this.fullRecordName
 				+ Zipper.EXTENSION_NAME))) {
 			if (this.kWriter != null) {
 				this.kWriter.stop();
 				zipper.addFile(this.kWriter.getFileLocation(),
-						currentDate + "."
-						+ this.textAreaRecordName.getText() + ".M"
+						this.fullRecordName
+						+ ".K"
 						+ ".csv");
 			}
 
 			if (this.mWriter != null) {
 				this.mWriter.stop();
 				zipper.addFile(this.mWriter.getFileLocation(),
-						currentDate + "."
-						+ this.textAreaRecordName.getText() + ".K"
+						this.fullRecordName
+						+ ".M"
 						+ ".csv");
 			}
 		} catch (IOException exception) {
@@ -228,8 +228,11 @@ public class MainWindowController implements Initializable, CloseEventListener {
 			return false;
 		}
 
-		if (new File(this.textAreaSaveDirectory.getText() + "/"
-				+ this.textAreaRecordName.getText() + Zipper.EXTENSION_NAME).exists()) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd"); // TODO: externalize
+		String currentDate = dateFormat.format(new Date());
+		this.fullRecordName = currentDate + "." + this.textAreaRecordName.getText();
+		if (new File(this.textAreaSaveDirectory.getText() + File.separator
+				+ this.fullRecordName + Zipper.EXTENSION_NAME).exists()) {
 			// Show the confirmation message.
 			final Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.getButtonTypes().set(0, ButtonType.YES);
