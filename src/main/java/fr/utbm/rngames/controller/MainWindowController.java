@@ -170,7 +170,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 				+ File.separator
 				+ this.fullRecordName
 				+ Zipper.EXTENSION_NAME))) {
-			if (this.kWriter != null) {
+			if (this.toggleButtonKeyboard.isSelected()) {
 				this.kWriter.stop();
 				zipper.addFile(this.kWriter.getFileLocation(),
 						this.fullRecordName
@@ -178,7 +178,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 						+ ".csv");
 			}
 
-			if (this.mWriter != null) {
+			if (this.toggleButtonMouse.isSelected()) {
 				this.mWriter.stop();
 				zipper.addFile(this.mWriter.getFileLocation(),
 						this.fullRecordName
