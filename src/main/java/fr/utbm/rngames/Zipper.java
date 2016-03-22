@@ -21,11 +21,11 @@ public class Zipper implements AutoCloseable {
         this.zipFile = new ZipOutputStream(new FileOutputStream(destination.getPath()));
     }
 
-    public void addFile(URL file) throws IOException {
+    public void addFile(URL file, String newNameInZip) throws IOException {
         File entry = new File(file.getPath());
 
         try (FileInputStream input = new FileInputStream(entry)) {
-            this.zipFile.putNextEntry(new ZipEntry(entry.getName()));
+            this.zipFile.putNextEntry(new ZipEntry(newNameInZip));
 
             int length;
             while ((length = input.read(this.buffer)) > 0) {
@@ -34,7 +34,6 @@ public class Zipper implements AutoCloseable {
 
             this.zipFile.closeEntry();
         }
-
     }
 
     @Override

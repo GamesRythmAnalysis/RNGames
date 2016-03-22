@@ -21,7 +21,10 @@ import org.arakhne.afc.vmutil.locale.Locale;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -118,7 +121,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 
 		if (this.toggleButtonKeyboard.isSelected()) {
 			try {
-				this.kWriter = new KeyboardWriter(new URL("file:///" + this.textAreaSaveDirectory.getText()
+				this.kWriter = new KeyboardWriter(new URL("file:///" + System.getProperty("java.io.tmpdir")
 						+ File.separator
 						+ Locale.getString(KeyboardWriter.class, "keyboard.file.name")));
 
@@ -130,7 +133,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 
 		if (this.toggleButtonMouse.isSelected()) {
 			try {
-				this.mWriter = new MouseWriter(new URL("file:///" + this.textAreaSaveDirectory.getText()
+				this.mWriter = new MouseWriter(new URL("file:///" + System.getProperty("java.io.tmpdir")
 						+ File.separator
 						+ Locale.getString(MouseWriter.class, "mouse.file.name")));
 
@@ -160,18 +163,27 @@ public class MainWindowController implements Initializable, CloseEventListener {
 	 * Helper method to stop recording and zip data.
 	 */
 	private void stopAndZip() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+		String currentDate = dateFormat.format(new Date());
 		try (Zipper zipper = new Zipper(new URL("file:///" + this.textAreaSaveDirectory.getText()
 				+ File.separator
+				+ currentDate + "."
 				+ this.textAreaRecordName.getText()
 				+ Zipper.EXTENSION_NAME))) {
 			if (this.kWriter != null) {
 				this.kWriter.stop();
-				zipper.addFile(this.kWriter.getFileLocation());
+				zipper.addFile(this.kWriter.getFileLocation(),
+						currentDate + "."
+						+ this.textAreaRecordName.getText() + ".M"
+						+ ".csv");
 			}
 
 			if (this.mWriter != null) {
 				this.mWriter.stop();
-				zipper.addFile(this.mWriter.getFileLocation());
+				zipper.addFile(this.mWriter.getFileLocation(),
+						currentDate + "."
+						+ this.textAreaRecordName.getText() + ".K"
+						+ ".csv");
 			}
 		} catch (IOException exception) {
 			this.logger.severe(exception.getMessage());
