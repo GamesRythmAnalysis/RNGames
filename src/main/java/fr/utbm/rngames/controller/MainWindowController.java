@@ -68,7 +68,8 @@ public class MainWindowController implements Initializable, CloseEventListener {
 		this.textAreaSaveDirectory.disableProperty().bind(this.startDisabled);
 		this.textAreaRecordName.disableProperty().bind(this.startDisabled);
 		this.buttonSelectDirectory.disableProperty().bind(this.startDisabled);
-		this.toggleButtonGamePad.disableProperty().bind(this.startDisabled);
+		//this.toggleButtonGamePad.disableProperty().bind(this.startDisabled);
+		this.toggleButtonGamePad.disableProperty().set(true); // FIXME: enable once it works.
 		this.toggleButtonKeyboard.disableProperty().bind(this.startDisabled);
 		this.toggleButtonMouse.disableProperty().bind(this.startDisabled);
 		this.buttonStartRecording.disableProperty().bind(this.startDisabled);
