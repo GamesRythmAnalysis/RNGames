@@ -6,3 +6,14 @@
 .menu-bar .menu .label {
     -fx-text-fill: #2d3e4c;
 }
+
+.select-device-button {
+    -fx-background-color: #E8E8E8;
+    -fx-border-color: #A0A0A0;
+    -fx-border-radius: 3;
+}
+
+.select-device-button:selected {
+    -fx-background-color: #787878;
+    -fx-text-fill: white;
+}

@@ -85,6 +85,7 @@ public class App extends Application implements CloseEventListener {
 			loader.setResources(ResourceBundle.getBundle("fr.utbm.rngames.templates.MainWindow_i18n.MainWindow", //$NON-NLS-1$
 					Locale.getDefault()));
 			final AnchorPane mainWindow = loader.load();
+			mainWindow.getStylesheets().add(App.class.getResource("templates/MainWindow_i18n/MainWindow.css").toExternalForm());
 
 			// Set person overview into the center of root layout.
 			this.rootLayout.setCenter(mainWindow);
