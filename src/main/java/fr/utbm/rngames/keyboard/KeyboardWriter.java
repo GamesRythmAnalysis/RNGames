@@ -1,5 +1,8 @@
 package fr.utbm.rngames.keyboard;
 
+import org.arakhne.afc.vmutil.locale.Locale;
+import org.jnativehook.keyboard.NativeKeyEvent;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,13 +10,13 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
-
-import org.arakhne.afc.vmutil.locale.Locale;
-import org.jnativehook.keyboard.NativeKeyEvent;
 
 public class KeyboardWriter extends KeyboardListener {
 	private static final String CSV_SEPARATOR;
+	private final List<Integer> keysPressed = new ArrayList<>();
 
 	static {
 		CSV_SEPARATOR = Locale.getString("keyboard.csv.separator"); //$NON-NLS-1$
@@ -50,16 +53,20 @@ public class KeyboardWriter extends KeyboardListener {
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent evt) {
-		try {
-			this.writer.write(generateFileEntry("Key Down", evt)); //$NON-NLS-1$
-			this.writer.newLine();
-		} catch (IOException exception) {
-			this.logger.severe(exception.getMessage());
+		if (!this.keysPressed.contains(evt.getKeyCode())) {
+			this.keysPressed.add(evt.getKeyCode());
+			try {
+				this.writer.write(generateFileEntry("Key Down", evt)); //$NON-NLS-1$
+				this.writer.newLine();
+			} catch (IOException exception) {
+				this.logger.severe(exception.getMessage());
+			}
 		}
 	}
 
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent evt) {
+		this.keysPressed.remove(new Integer(evt.getKeyCode()));
 		try {
 			this.writer.write(generateFileEntry("Key Up", evt)); //$NON-NLS-1$
 			this.writer.newLine();
