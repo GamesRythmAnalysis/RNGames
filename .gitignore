@@ -40,12 +40,7 @@ target
 .DS_Store
 
 # Ant build
-build/build/*
-build/deploy/*
-build/dist/*
-build/externalLibs/*
-build/project/*
-build/projectRefs/*
+build/*
 
 # Maven build
 target/*
