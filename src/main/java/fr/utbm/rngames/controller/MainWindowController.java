@@ -228,7 +228,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 			return false;
 		}
 
-		DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd"); // TODO: externalize
+		DateFormat dateFormat = new SimpleDateFormat(Locale.getString("date.format")); //$NON-NLS-1$
 		String currentDate = dateFormat.format(new Date());
 		this.fullRecordName = currentDate + "." + this.textAreaRecordName.getText();
 		if (new File(this.textAreaSaveDirectory.getText() + File.separator
