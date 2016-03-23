@@ -91,7 +91,8 @@ public class MouseWriter extends MouseListener {
 
 	@Override
 	public void nativeMouseDragged(NativeMouseEvent evt) {
-		// Unused in this project
+		// we simply consider mouse dragged events as mouse moved events.
+		nativeMouseMoved(evt);
 	}
 
 	@Override
