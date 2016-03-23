@@ -104,15 +104,15 @@ public class App extends Application implements CloseEventListener {
 			Locale.setDefault(Locale.ENGLISH);
 		}
 
+		final Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+		logger.setLevel(Level.OFF);
+		logger.setUseParentHandlers(false);
+
 		try {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException exception) {
 			App.logger.severe(exception.getMessage());
 		}
-
-		final Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-		logger.setLevel(Level.OFF);
-		logger.setUseParentHandlers(false);
 
 		launch(args);
 
