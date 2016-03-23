@@ -166,24 +166,26 @@ public class MainWindowController implements Initializable, CloseEventListener {
 	 * Helper method to stop recording and zip data.
 	 */
 	private void stopAndZip() {
-		try (Zipper zipper = new Zipper(new URL("file:///" + this.textAreaSaveDirectory.getText()
+		try (Zipper zipper = new Zipper(new URL("file:///" + this.textAreaSaveDirectory.getText() //$NON-NLS-1$
 				+ File.separator
 				+ this.fullRecordName
 				+ Zipper.EXTENSION_NAME))) {
+			String logfileExtension = Locale.getString("logfile.extension"); //$NON-NLS-1$
+
 			if (this.toggleButtonKeyboard.isSelected()) {
 				this.kWriter.stop();
 				zipper.addFile(this.kWriter.getFileLocation(),
 						this.fullRecordName
-						+ ".K"
-						+ ".csv");
+						+ Locale.getString("logfile.keyboard.end") //$NON-NLS-1$
+						+ logfileExtension);
 			}
 
 			if (this.toggleButtonMouse.isSelected()) {
 				this.mWriter.stop();
 				zipper.addFile(this.mWriter.getFileLocation(),
 						this.fullRecordName
-						+ ".M"
-						+ ".csv");
+						+ Locale.getString("logfile.mouse.end") //$NON-NLS-1$
+						+ logfileExtension);
 			}
 		} catch (IOException exception) {
 			this.logger.severe(exception.getMessage());
