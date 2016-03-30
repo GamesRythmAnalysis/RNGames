@@ -23,6 +23,8 @@ import fr.utbm.rngames.Zipper;
 import fr.utbm.rngames.event.EventDispatcher;
 import fr.utbm.rngames.keyboard.KeyboardWriter;
 import fr.utbm.rngames.mouse.MouseWriter;
+import fr.utbm.rngames.screen.ScreenMonitor;
+import fr.utbm.rngames.screen.ScreenWriter;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -46,15 +48,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 public class MainWindowController implements Initializable, CloseEventListener {
 
-	private final Logger logger = Logger.getLogger(MainWindowController.class.getName());
+	private static final Logger LOG = Logger.getLogger(MainWindowController.class.getName());
 
 	private KeyboardWriter kWriter;
 	private MouseWriter mWriter;
+	private ScreenWriter sWriter;
+	private ScreenMonitor screenMonitor;
 	private final BooleanProperty startDisabled = new SimpleBooleanProperty(false);
+
+	private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 	@FXML
 	private TextField textAreaSaveDirectory;
@@ -148,7 +156,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 
 				this.kWriter.start();
 			} catch (IOException exception) {
-				this.logger.severe(exception.getMessage());
+				LOG.severe(exception.getMessage());
 			}
 		}
 
@@ -160,7 +168,20 @@ public class MainWindowController implements Initializable, CloseEventListener {
 
 				this.mWriter.start();
 			} catch (IOException exception) {
-				this.logger.severe(exception.getMessage());
+				LOG.severe(exception.getMessage());
+			}
+
+			try {
+				this.sWriter = new ScreenWriter(new URL("file:///" + System.getProperty("java.io.tmpdir")
+						+ File.separator
+						+ Locale.getString(ScreenWriter.class, "screen.file.name")));
+
+				this.sWriter.start();
+
+				this.screenMonitor = new ScreenMonitor();
+				this.executorService.execute(this.screenMonitor);
+			} catch (IOException exception) {
+				LOG.severe(exception.getMessage());
 			}
 		}
 
@@ -178,6 +199,8 @@ public class MainWindowController implements Initializable, CloseEventListener {
 		if (this.startDisabled.get()) {
 			stopAndZip();
 		}
+
+		this.executorService.shutdown();
 	}
 
 	/**
@@ -204,9 +227,16 @@ public class MainWindowController implements Initializable, CloseEventListener {
 						this.fullRecordName
 						+ Locale.getString("logfile.mouse.end") //$NON-NLS-1$
 						+ logfileExtension);
+
+				this.sWriter.stop();
+				zipper.addFile(this.sWriter.getFileLocation(),
+						this.fullRecordName
+								+ Locale.getString("logfile.other.end") //$NON-NLS-1$
+								+ logfileExtension);
+				this.screenMonitor.stop();
 			}
 		} catch (IOException exception) {
-			this.logger.severe(exception.getMessage());
+			LOG.severe(exception.getMessage());
 		}
 	}
 
