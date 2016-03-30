@@ -32,12 +32,23 @@ import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 public class MouseWriter extends MouseListener {
-	private static final String CSV_SEPARATOR;
 	private static final Logger LOG;
+
+	private static final String CSV_SEPARATOR;
+	private static final String EVENT_NAME;
+	private static final String PRESSED_EVENT;
+	private static final String RELEASED_EVENT;
+	private static final String SCROLLED_EVENT;
+	private static final String MOVED_EVENT;
 
 	static {
 		CSV_SEPARATOR = Locale.getString("mouse.csv.separator"); //$NON-NLS-1$
 		LOG = Logger.getLogger(MouseWriter.class.getName());
+		EVENT_NAME = Locale.getString("mouse.event.name"); //$NON-NLS-1$
+		PRESSED_EVENT = Locale.getString("mouse.event.pressed"); //$NON-NLS-1$
+		RELEASED_EVENT = Locale.getString("mouse.event.released"); //$NON-NLS-1$
+		SCROLLED_EVENT = Locale.getString("mouse.event.scrolled"); //$NON-NLS-1$
+		MOVED_EVENT = Locale.getString("mouse.event.moved"); //$NON-NLS-1$
 	}
 
 	private final long startTime;
@@ -56,7 +67,7 @@ public class MouseWriter extends MouseListener {
 		this.writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),
 				StandardCharsets.UTF_8));
 
-		this.writer.write(Locale.getString("mouse.file.header"));
+		this.writer.write(Locale.getString("mouse.file.header")); //$NON-NLS-1$
 		this.writer.newLine();
 	}
 
@@ -77,7 +88,7 @@ public class MouseWriter extends MouseListener {
 	@Override
 	public void nativeMousePressed(NativeMouseEvent evt) {
 		try {
-			this.writer.write(generateMouseButtonEntry(Locale.getString("mouse.event.pressed"), evt));
+			this.writer.write(generateMouseButtonEntry(PRESSED_EVENT, evt));
 			this.writer.newLine();
 		} catch (IOException exception) {
 			LOG.severe(exception.getMessage());
@@ -87,7 +98,7 @@ public class MouseWriter extends MouseListener {
 	@Override
 	public void nativeMouseReleased(NativeMouseEvent evt) {
 		try {
-			this.writer.write(generateMouseButtonEntry(Locale.getString("mouse.event.released"), evt));
+			this.writer.write(generateMouseButtonEntry(RELEASED_EVENT, evt));
 			this.writer.newLine();
 		} catch (IOException exception) {
 			LOG.severe(exception.getMessage());
@@ -125,7 +136,7 @@ public class MouseWriter extends MouseListener {
 	}
 
 	private String generateMouseButtonEntry(String eventType, NativeMouseEvent evt) {
-		return "mouse " + evt.getButton() + " " +  eventType + CSV_SEPARATOR //$NON-NLS-1$ //$NON-NLS-2$
+		return EVENT_NAME + " " + evt.getButton() + " " + eventType + CSV_SEPARATOR //$NON-NLS-1$ //$NON-NLS-2$
 				+ evt.getX() + CSV_SEPARATOR
 				+ evt.getY() + CSV_SEPARATOR
 				+ (evt.getWhen() - this.startTime);
@@ -133,20 +144,20 @@ public class MouseWriter extends MouseListener {
 
 	private String generateMouseButtonEntry(NativeMouseWheelEvent evt) {
 		if (evt.getWheelRotation() > 0) {
-			return "mouse scroll down" + CSV_SEPARATOR //$NON-NLS-1$
+			return EVENT_NAME + " " + SCROLLED_EVENT + " " + PRESSED_EVENT + CSV_SEPARATOR //$NON-NLS-1$
 					+ evt.getX() + CSV_SEPARATOR
 					+ evt.getY() + CSV_SEPARATOR
 					+ (evt.getWhen() - this.startTime);
 		}
 
-		return "mouse scroll up" + CSV_SEPARATOR //$NON-NLS-1$
+		return EVENT_NAME + " " + SCROLLED_EVENT + " " + RELEASED_EVENT + CSV_SEPARATOR //$NON-NLS-1$
 				+ evt.getX() + CSV_SEPARATOR
 				+ evt.getY() + CSV_SEPARATOR
 				+ (evt.getWhen() - this.startTime);
 	}
 
 	private String generateMouseMoveEntry(NativeMouseEvent evt) {
-		return "mouse move" + CSV_SEPARATOR //$NON-NLS-1$
+		return EVENT_NAME + " " + MOVED_EVENT + CSV_SEPARATOR //$NON-NLS-1$
 				+ evt.getX() + CSV_SEPARATOR
 				+ evt.getY() + CSV_SEPARATOR
 				+ (evt.getWhen() - this.startTime);
