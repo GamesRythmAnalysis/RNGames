@@ -5,6 +5,8 @@
 
 package fr.utbm.rngames.event;
 
-public interface Event<T> {
+import java.util.EventListener;
+
+public interface Event<T extends EventListener> {
 	void notify(T listener);
 }
