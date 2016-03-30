@@ -39,7 +39,7 @@ public class KeyboardWriter extends KeyboardListener {
 		CSV_SEPARATOR = Locale.getString("keyboard.csv.separator"); //$NON-NLS-1$
 	}
 
-	private final Logger logger = Logger.getLogger(KeyboardWriter.class.getName());
+	private static final Logger LOG = Logger.getLogger(KeyboardWriter.class.getName());
 
 	private final List<Integer> keysPressed = new ArrayList<>();
 	private final long startTime;
@@ -67,19 +67,19 @@ public class KeyboardWriter extends KeyboardListener {
 		try {
 			this.writer.close();
 		} catch (IOException exception) {
-			this.logger.severe(exception.getMessage());
+			LOG.severe(exception.getMessage());
 		}
 	}
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent evt) {
-		if (!this.keysPressed.contains(evt.getKeyCode())) {
-			this.keysPressed.add(evt.getKeyCode());
+		if (!this.keysPressed.contains(new Integer(evt.getKeyCode()))) {
+			this.keysPressed.add(new Integer(evt.getKeyCode()));
 			try {
 				this.writer.write(generateFileEntry("Key Down", evt)); //$NON-NLS-1$
 				this.writer.newLine();
 			} catch (IOException exception) {
-				this.logger.severe(exception.getMessage());
+				LOG.severe(exception.getMessage());
 			}
 		}
 	}
@@ -91,7 +91,7 @@ public class KeyboardWriter extends KeyboardListener {
 			this.writer.write(generateFileEntry("Key Up", evt)); //$NON-NLS-1$
 			this.writer.newLine();
 		} catch (IOException exception) {
-			this.logger.severe(exception.getMessage());
+			LOG.severe(exception.getMessage());
 		}
 	}
 

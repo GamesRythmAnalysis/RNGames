@@ -33,12 +33,12 @@ import java.util.logging.Logger;
 
 public class MouseWriter extends MouseListener {
 	private static final String CSV_SEPARATOR;
+	private static final Logger LOG;
 
 	static {
 		CSV_SEPARATOR = Locale.getString("mouse.csv.separator"); //$NON-NLS-1$
+		LOG = Logger.getLogger(MouseWriter.class.getName());
 	}
-
-	private final Logger logger = Logger.getLogger(MouseWriter.class.getName());
 
 	private final long startTime;
 	private final URL fileLocation;
@@ -65,7 +65,7 @@ public class MouseWriter extends MouseListener {
 		try {
 			this.writer.close();
 		} catch (IOException exception) {
-			this.logger.severe(exception.getMessage());
+			LOG.severe(exception.getMessage());
 		}
 	}
 
@@ -80,8 +80,7 @@ public class MouseWriter extends MouseListener {
 			this.writer.write(generateMouseButtonEntry(Locale.getString("mouse.event.pressed"), evt));
 			this.writer.newLine();
 		} catch (IOException exception) {
-			this.logger.severe(exception.getMessage());
-			// System.exit(-1);
+			LOG.severe(exception.getMessage());
 		}
 	}
 
@@ -91,8 +90,7 @@ public class MouseWriter extends MouseListener {
 			this.writer.write(generateMouseButtonEntry(Locale.getString("mouse.event.released"), evt));
 			this.writer.newLine();
 		} catch (IOException exception) {
-			this.logger.severe(exception.getMessage());
-			// System.exit(-1);
+			LOG.severe(exception.getMessage());
 		}
 	}
 
@@ -102,8 +100,7 @@ public class MouseWriter extends MouseListener {
 			this.writer.write(generateMouseMoveEntry(evt));
 			this.writer.newLine();
 		} catch (IOException exception) {
-			this.logger.severe(exception.getMessage());
-			// System.exit(-1);
+			LOG.severe(exception.getMessage());
 		}
 	}
 
@@ -119,8 +116,7 @@ public class MouseWriter extends MouseListener {
 			this.writer.write(generateMouseButtonEntry(evt));
 			this.writer.newLine();
 		} catch (IOException exception) {
-			this.logger.severe(exception.getMessage());
-			// System.exit(-1);
+			LOG.severe(exception.getMessage());
 		}
 	}
 
