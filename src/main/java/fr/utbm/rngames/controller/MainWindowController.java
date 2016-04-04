@@ -71,6 +71,9 @@ public class MainWindowController implements Initializable, CloseEventListener {
 	private Button buttonSelectDirectory;
 
 	@FXML
+	private TextField textAreaUserName;
+
+	@FXML
 	private TextField textAreaRecordName;
 
 	@FXML
@@ -98,6 +101,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 	public void initialize(URL location, ResourceBundle resources) {
 		this.textAreaSaveDirectory.disableProperty().bind(this.startDisabled);
 		this.textAreaSaveDirectory.disableProperty().bind(this.startDisabled);
+		this.textAreaUserName.disableProperty().bind(this.startDisabled);
 		this.textAreaRecordName.disableProperty().bind(this.startDisabled);
 		this.buttonSelectDirectory.disableProperty().bind(this.startDisabled);
 		//this.toggleButtonGamePad.disableProperty().bind(this.startDisabled);
@@ -248,11 +252,14 @@ public class MainWindowController implements Initializable, CloseEventListener {
 	private boolean isReadyToRecord() {
 		final List<String> errorMessages = new ArrayList<>();
 
-		if (this.textAreaSaveDirectory.getText() == null
-				|| this.textAreaSaveDirectory.getText().isEmpty()) {
+		if (this.textAreaSaveDirectory.getText().isEmpty()) {
 			errorMessages.add(Locale.getString("error.no.save.directory")); //$NON-NLS-1$
 		} else if (!new File(this.textAreaSaveDirectory.getText()).exists()) {
 			errorMessages.add(Locale.getString("error.invalid.save.directory")); //$NON-NLS-1$
+		}
+
+		if (this.textAreaUserName.getText().isEmpty()) {
+			errorMessages.add(Locale.getString("error.no.user.name")); //$NON-NLS-1$
 		}
 
 		if (this.textAreaRecordName.getText().isEmpty()) {
@@ -280,7 +287,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 
 		DateFormat dateFormat = new SimpleDateFormat(Locale.getString("date.format")); //$NON-NLS-1$
 		String currentDate = dateFormat.format(new Date());
-		this.fullRecordName = currentDate + "." + this.textAreaRecordName.getText();
+		this.fullRecordName = currentDate + "." + this.textAreaUserName.getText() + "." + this.textAreaRecordName.getText();
 		if (new File(this.textAreaSaveDirectory.getText() + File.separator
 				+ this.fullRecordName + Zipper.EXTENSION_NAME).exists()) {
 			// Show the confirmation message.

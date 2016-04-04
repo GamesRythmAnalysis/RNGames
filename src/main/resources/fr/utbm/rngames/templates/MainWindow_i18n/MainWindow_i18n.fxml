@@ -18,7 +18,13 @@
             </HBox>
             <HBox alignment="CENTER" spacing="5.0">
                <children>
-                  <Label text="%label.filename" />
+                  <Label text="%label.user.name" />
+                  <TextField fx:id="textAreaUserName" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" spacing="5.0">
+               <children>
+                  <Label text="%label.record.name" />
                   <TextField fx:id="textAreaRecordName">
                      <HBox.margin>
                         <Insets />
