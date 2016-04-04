@@ -51,6 +51,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 public class MainWindowController implements Initializable, CloseEventListener {
 
@@ -112,6 +113,27 @@ public class MainWindowController implements Initializable, CloseEventListener {
 		this.buttonStopRecording.disableProperty().bind(this.startDisabled.not());
 
 		EventDispatcher.getInstance().addListener(CloseEvent.class, this);
+
+		/* Get the saveDirectory, username and recordName preference.
+		 * The preference is read from the OS specific registry. If no such
+		 * preference can be found, null is returned.
+		 */
+		Preferences prefs = Preferences.userNodeForPackage(App.class);
+
+		String saveDirectory = prefs.get("saveDirectory", null); //$NON-NLS-1$
+		if (saveDirectory != null) {
+			this.textAreaSaveDirectory.setText(saveDirectory);
+		}
+
+		String username = prefs.get("username", null); //$NON-NLS-1$
+		if (username != null) {
+			this.textAreaUserName.setText(username);
+		}
+
+		String recordName = prefs.get("recordName", null); //$NON-NLS-1$
+		if (recordName != null) {
+			this.textAreaRecordName.setText(recordName);
+		}
 	}
 
 	/**
@@ -205,6 +227,29 @@ public class MainWindowController implements Initializable, CloseEventListener {
 		}
 
 		this.executorService.shutdown();
+
+		/* Save saveDirectory, username and recordName in
+		 * the OS specific registry.
+		 */
+		Preferences prefs = Preferences.userNodeForPackage(App.class);
+
+		if (!this.textAreaSaveDirectory.getText().isEmpty()) {
+			prefs.put("saveDirectory", this.textAreaSaveDirectory.getText()); //$NON-NLS-1$
+		} else {
+			prefs.remove("saveDirectory"); //$NON-NLS-1$
+		}
+
+		if (!this.textAreaUserName.getText().isEmpty()) {
+			prefs.put("username", this.textAreaUserName.getText()); //$NON-NLS-1$
+		} else {
+			prefs.remove("username"); //$NON-NLS-1$
+		}
+
+		if (!this.textAreaRecordName.getText().isEmpty()) {
+			prefs.put("recordName", this.textAreaRecordName.getText()); //$NON-NLS-1$
+		} else {
+			prefs.remove("recordName"); //$NON-NLS-1$
+		}
 	}
 
 	/**
