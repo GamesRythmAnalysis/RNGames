@@ -117,11 +117,6 @@ public class App extends Application implements CloseEventListener {
 	}
 
 	public static void main(String[] args) {
-		// Security check
-		if ((Locale.getDefault() != Locale.FRANCE) && (Locale.getDefault() != Locale.FRENCH)) {
-			Locale.setDefault(Locale.ENGLISH);
-		}
-
 		final Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
 		logger.setLevel(Level.OFF);
 		logger.setUseParentHandlers(false);
