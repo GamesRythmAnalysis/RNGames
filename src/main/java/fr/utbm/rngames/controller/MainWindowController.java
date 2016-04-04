@@ -231,7 +231,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 				this.sWriter.stop();
 				zipper.addFile(this.sWriter.getFileLocation(),
 						this.fullRecordName
-								+ Locale.getString("logfile.other.end") //$NON-NLS-1$
+								+ Locale.getString("logfile.screen.end") //$NON-NLS-1$
 								+ logfileExtension);
 				this.screenMonitor.stop();
 			}
