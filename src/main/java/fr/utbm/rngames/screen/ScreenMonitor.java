@@ -67,7 +67,8 @@ public class ScreenMonitor implements CloseEventListener, Runnable {
 		this.running = false;
 	}
 
+	@Override
 	public void handleCloseEvent() {
-		this.running = false;
+		stop();
 	}
 }

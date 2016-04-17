@@ -19,11 +19,7 @@
 package fr.utbm.rngames.screen;
 
 import fr.utbm.rngames.event.EventDispatcher;
-import fr.utbm.rngames.mouse.MouseWriter;
 import org.arakhne.afc.vmutil.locale.Locale;
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.mouse.NativeMouseEvent;
-import org.jnativehook.mouse.NativeMouseWheelEvent;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -41,7 +37,7 @@ public class ScreenWriter implements ScreenEventListener {
 		CSV_SEPARATOR = Locale.getString("screen.csv.separator"); //$NON-NLS-1$
 	}
 
-	private static final Logger LOG = Logger.getLogger(MouseWriter.class.getName());
+	private static final Logger LOG = Logger.getLogger(ScreenWriter.class.getName());
 
 	private final long startTime;
 	private final URL fileLocation;
