@@ -30,15 +30,26 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
+import org.jnativehook.NativeSystem;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class App extends Application implements CloseEventListener {
-	private static final Logger logger = Logger.getLogger(App.class.getName());
+	private static final Logger LOG = Logger.getLogger(App.class.getName());
+
+	// folder where jinput libraries are going to be extracted.
+	private static String TMP_LIBS_FOLDER = System.getProperty("java.io.tmpdir") + "/rngames-libs";
+
 	private Stage primStage;
 	private BorderPane rootLayout;
 
@@ -88,7 +99,7 @@ public class App extends Application implements CloseEventListener {
 
 			this.primStage.show();
 		} catch (IOException exception) {
-			App.logger.severe(exception.getMessage());
+			LOG.severe(exception.getMessage());
 		}
 	}
 
@@ -112,7 +123,94 @@ public class App extends Application implements CloseEventListener {
 			final MainWindowController controller = loader.getController();
 			controller.setApp(this);
 		} catch (IOException exception) {
-			App.logger.severe(exception.getMessage());
+			LOG.severe(exception.getMessage());
+		}
+	}
+
+	public static void copyStreamTo(InputStream stream, File path) {
+		try {
+			Files.copy(stream, path.getAbsoluteFile().toPath());
+		} catch (IOException exception) {
+			LOG.severe(exception.getMessage());
+		}
+	}
+
+	public static void extractJInputLib() {
+		NativeSystem.Family systemFamily = NativeSystem.getFamily();
+		NativeSystem.Arch systemArchitecture = NativeSystem.getArchitecture();
+		List<String> filesToExtract = new LinkedList<>();
+
+		switch (systemFamily) {
+			case LINUX:
+				switch (systemArchitecture) {
+					case x86:
+						filesToExtract.add("libjinput-linux.so");
+						break;
+					case x86_64:
+						filesToExtract.add("libjinput-linux64.so");
+						break;
+					default:
+						break;
+				}
+				break;
+			case WINDOWS:
+				filesToExtract.add("jinput-wintab.dll");
+				switch (systemArchitecture) {
+					case x86:
+						filesToExtract.add("jinput-raw.dll");
+						filesToExtract.add("jinput-dx8.dll");
+						break;
+					case x86_64:
+						filesToExtract.add("jinput-raw_64.dll");
+						filesToExtract.add("jinput-dx8_64.dll");
+						break;
+					default:
+						break;
+				}
+				break;
+			case DARWIN:
+				filesToExtract.add("libjinput-osx.jnilib");
+				break;
+			default:
+				break;
+		}
+
+		File libDir = new File(TMP_LIBS_FOLDER);
+		if (!libDir.exists()) {
+			libDir.mkdir();
+		}
+
+		for (String filename : filesToExtract) {
+			File file = new File(TMP_LIBS_FOLDER + "/" + filename);
+			if (!file.exists()) {
+				InputStream stream = net.java.games.input.Controller.class.getResourceAsStream("libs/" + filename);
+				copyStreamTo(stream, file);
+			}
+		}
+	}
+
+	public static void addLibDir(String s) throws IOException {
+		// Code taken from http://nicklothian.com/blog/2008/11/19/modify-javalibrarypath-at-runtime/
+		try {
+			// This enables the java.library.path to be modified at runtime
+			// From a Sun engineer at http://forums.sun.com/thread.jspa?threadID=707176
+			Field field = ClassLoader.class.getDeclaredField("usr_paths");
+			field.setAccessible(true);
+			String[] paths = (String[]) field.get(null);
+			for (int i = 0; i < paths.length; i++) {
+				if (s.equals(paths[i])) {
+					return;
+				}
+			}
+			String[] tmp = new String[paths.length + 1];
+			System.arraycopy(paths, 0, tmp, 0, paths.length);
+			tmp[paths.length] = s;
+			field.set(null, tmp);
+			System.setProperty("java.library.path", System.getProperty("java.library.path") + File.pathSeparator + s);
+		} catch (IllegalAccessException e) {
+			throw new IOException("Failed to get permissions to set library path");
+		} catch (NoSuchFieldException e) {
+			throw new IOException("Failed to get field handle to set library path");
 		}
 	}
 
@@ -124,7 +222,14 @@ public class App extends Application implements CloseEventListener {
 		try {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException exception) {
-			App.logger.severe(exception.getMessage());
+			LOG.severe(exception.getMessage());
+		}
+
+		extractJInputLib();
+		try {
+			addLibDir(TMP_LIBS_FOLDER);
+		} catch (IOException exception) {
+			LOG.severe(exception.getMessage());
 		}
 
 		launch(args);
@@ -132,7 +237,7 @@ public class App extends Application implements CloseEventListener {
 		try {
 			GlobalScreen.unregisterNativeHook();
 		} catch (NativeHookException exception) {
-			App.logger.severe(exception.getMessage());
+			LOG.severe(exception.getMessage());
 		}
 	}
 

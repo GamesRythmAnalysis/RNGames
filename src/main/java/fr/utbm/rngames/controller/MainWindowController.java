@@ -21,6 +21,8 @@ package fr.utbm.rngames.controller;
 import fr.utbm.rngames.App;
 import fr.utbm.rngames.Zipper;
 import fr.utbm.rngames.event.EventDispatcher;
+import fr.utbm.rngames.gamepad.GamepadMonitor;
+import fr.utbm.rngames.gamepad.GamepadWriter;
 import fr.utbm.rngames.keyboard.KeyboardWriter;
 import fr.utbm.rngames.mouse.MouseWriter;
 import fr.utbm.rngames.screen.ScreenMonitor;
@@ -58,12 +60,20 @@ public class MainWindowController implements Initializable, CloseEventListener {
 	private static final Logger LOG = Logger.getLogger(MainWindowController.class.getName());
 
 	private KeyboardWriter kWriter;
+
 	private MouseWriter mWriter;
+
 	private ScreenWriter sWriter;
+
 	private ScreenMonitor screenMonitor;
+
+	private GamepadWriter pWriter;
+
+	private GamepadMonitor gamepadMonitor;
+
 	private final BooleanProperty startDisabled = new SimpleBooleanProperty(false);
 
-	private ExecutorService executorService = Executors.newSingleThreadExecutor();
+	private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
 	@FXML
 	private TextField textAreaSaveDirectory;
@@ -105,8 +115,7 @@ public class MainWindowController implements Initializable, CloseEventListener {
 		this.textAreaUserName.disableProperty().bind(this.startDisabled);
 		this.textAreaRecordName.disableProperty().bind(this.startDisabled);
 		this.buttonSelectDirectory.disableProperty().bind(this.startDisabled);
-		//this.toggleButtonGamePad.disableProperty().bind(this.startDisabled);
-		this.toggleButtonGamePad.disableProperty().set(true); // FIXME: enable once it works.
+		this.toggleButtonGamePad.disableProperty().bind(this.startDisabled);
 		this.toggleButtonKeyboard.disableProperty().bind(this.startDisabled);
 		this.toggleButtonMouse.disableProperty().bind(this.startDisabled);
 		this.buttonStartRecording.disableProperty().bind(this.startDisabled);
@@ -174,6 +183,8 @@ public class MainWindowController implements Initializable, CloseEventListener {
 			return;
 		}
 
+		this.startDisabled.set(true);
+
 		if (this.toggleButtonKeyboard.isSelected()) {
 			try {
 				this.kWriter = new KeyboardWriter(new URL("file:///" + System.getProperty("java.io.tmpdir")
@@ -211,7 +222,20 @@ public class MainWindowController implements Initializable, CloseEventListener {
 			}
 		}
 
-		this.startDisabled.set(true);
+		if (this.toggleButtonGamePad.isSelected()) {
+			try {
+				this.pWriter = new GamepadWriter(new URL("file:///" + System.getProperty("java.io.tmpdir")
+						+ File.separator
+						+ Locale.getString(GamepadWriter.class, "gamepad.file.name")));
+
+				this.pWriter.start();
+
+				this.gamepadMonitor = new GamepadMonitor();
+				this.executorService.execute(this.gamepadMonitor);
+			} catch (IOException exception) {
+				LOG.severe(exception.getMessage());
+			}
+		}
 	}
 
 	@FXML
@@ -284,6 +308,15 @@ public class MainWindowController implements Initializable, CloseEventListener {
 								+ logfileExtension);
 				this.screenMonitor.stop();
 			}
+
+			if (this.toggleButtonGamePad.isSelected()) {
+				this.pWriter.stop();
+				zipper.addFile(this.pWriter.getFileLocation(),
+						this.fullRecordName
+								+ Locale.getString("logfile.gamepad.end") //$NON-NLS-1$
+								+ logfileExtension);
+				this.gamepadMonitor.stop();
+			}
 		} catch (IOException exception) {
 			LOG.severe(exception.getMessage());
 		}
@@ -315,6 +348,10 @@ public class MainWindowController implements Initializable, CloseEventListener {
 				&& !this.toggleButtonKeyboard.isSelected()
 				&& !this.toggleButtonMouse.isSelected()) {
 			errorMessages.add(Locale.getString("error.no.device")); //$NON-NLS-1$
+		}
+
+		if (this.toggleButtonGamePad.isSelected() && GamepadMonitor.isNoGamepadFound()) {
+			errorMessages.add(Locale.getString("error.no.gamepad.found")); //$NON-NLS-1$
 		}
 
 		if (!errorMessages.isEmpty()) {
@@ -352,5 +389,4 @@ public class MainWindowController implements Initializable, CloseEventListener {
 
 		return true;
 	}
-
 }
