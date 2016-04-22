@@ -4,7 +4,7 @@
 
   <groupId>fr.utbm</groupId>
   <artifactId>rngames</artifactId>
-  <version>1.3.1-SNAPSHOT</version>
+  <version>1.4.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>RNGames</name>
@@ -35,12 +35,6 @@
     	<groupId>net.java.jinput</groupId>
     	<artifactId>jinput</artifactId>
     	<version>2.0.6</version>
-    </dependency>
-    <dependency>
-    	<groupId>net.java.jinput</groupId>
-    	<artifactId>jinput-platform</artifactId>
-    	<version>2.0.6</version>
-    	<type>pom</type>
     </dependency>
   </dependencies>
 
