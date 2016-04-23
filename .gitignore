@@ -28,7 +28,6 @@ target
 *.obj
 *.a
 *.lib
-*.dll
 *.exe
 
 # Temp files
